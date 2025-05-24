@@ -1,0 +1,2 @@
+# glossary
+ compendium of algorithms
