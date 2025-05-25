@@ -4,3 +4,6 @@
 # React Router
 /.react-router/
 /build/
+
+# IDE's
+/.idea/
