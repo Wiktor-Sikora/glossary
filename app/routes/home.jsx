@@ -14,23 +14,40 @@ export function meta() {
   ];
 }
 
+function Header(){
+  return(
+    <h1 className="font-miriam text-rosepink text-center pt-5
+    2xl:xl:lg:text-9xl
+    md:text-8xl
+    max-md:text-6xl
+    max-sm:text-6xl">
+    Algorithms</h1>
+  )
+}
+
 function Tile({ img, gif, imgAlt, title, purpose, complexity}) {
   const [isHovered, setIsHovered] = useState(false);
 
   return(
-    <div className="flex flex-col gap-3 rounded-2xl p-5 w-80 border-4 border-blue-magenta 
-    hover:scale-110 ease-in-out duration-200 hover:p-3"
+    <div className="flex flex-col rounded-2xl p-5 w-80 border-4 border-blue-magenta 
+    hover:scale-110 ease-in-out duration-200 hover:p-3
+    2xl:xl:lg:w-80
+    md:w-50
+    max-md:w-60"
      onMouseEnter={() => setIsHovered(true)}
      onMouseLeave={() => setIsHovered(false)}
     >
-      <img className="scale-90" src={isHovered ? gif ?? img : img} alt={imgAlt}/>
+      <img className="mb-2 scale-90" src={isHovered ? gif ?? img : img} alt={imgAlt}/>
+      <p className="text-xl text-rosepink font-mono font-bold
+      max-sm:text-lg">{title}</p>
       <div className="flex flex-row justify-between w-full">
           <div className="flex flex-col self-start">
-              <p className="text-xl text-rosepink font-mono font-bold">{title}</p>
-              <p className="text-md text-rosepink font-mono font-bold">{purpose}</p>
+              <p className="text-lg text-left text-dark-rosepink font-mono font-bold
+              max-sm:text-sm">{purpose}</p>
           </div>
           <div className="flex flex-col self-end">
-              <p className="text-xl text-rosepink font-mono font-bold">{title}</p>
+              <p className="text-xl text-right text-dark-rosepink font-mono font-bold
+              max-sm:text-lg">{complexity}</p>
           </div>
       </div>
     </div>
@@ -39,11 +56,13 @@ function Tile({ img, gif, imgAlt, title, purpose, complexity}) {
 
 function Tiles() {
   return(
-    <div className="w-[80%] mt-[5%] ml-auto mr-auto grid grid-cols-4 gap-y-10
-    md:grid-cols-3 md:scale-90
-    sm:grid-cols-1">
-      <Tile title="Sort" purpose="Sorting" img={imgSort} gif={gifSort} imgAlt="Sort"/>
-      <Tile title="Option 2" img={imgSearch} gif={gifSearch} imgAlt="Search"/>
+    <div className="w-[80%] mt-5 ml-auto mr-auto grid gap-y-10
+    2xl:xl:grid-cols-4
+    md:grid-cols-3
+    max-md:grid-cols-2
+    max-sm:grid-cols-1 max-sm:w-fit">
+      <Tile title="Quick sort" purpose="Sorting" complexity="O(n)" img={imgSort} gif={gifSort} imgAlt="Sort"/>
+      <Tile title="Option 2" purpose="Purpose" img={imgSearch} gif={gifSearch} imgAlt="Search"/>
       <Tile title="Option 3" img={imgGraph} gif={gifGraph} imgAlt="Graph"/>
       <Tile title="Option 4"/>
       <Tile title="Option 5"/>
@@ -56,5 +75,10 @@ function Tiles() {
 
 
 export default function Home() {
-  return <Tiles />;
+  return(
+  <>
+    <Header />
+    <Tiles />
+  </>
+  );
 }
