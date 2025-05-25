@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="01a1b709-1496-4ea0-b91e-36c3c6d41df9" name="Changes" comment="" />
+    <list default="true" id="01a1b709-1496-4ea0-b91e-36c3c6d41df9" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/app/routes/baseArticle.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/routes/lists/searching/binarySearch.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/routes.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -49,7 +54,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/sikora/Development/studia&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/sikora/Development/studia/glossary/app/routes/lists/searching&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -60,6 +65,11 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/routes/lists/searching" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -74,7 +84,9 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1748076629264</updated>
-      <workItem from="1748076630540" duration="15550000" />
+      <workItem from="1748076630540" duration="15920000" />
+      <workItem from="1748119849493" duration="3076000" />
+      <workItem from="1748179404188" duration="6148000" />
     </task>
     <servers />
   </component>

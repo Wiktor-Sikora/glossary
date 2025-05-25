@@ -1,6 +1,6 @@
-import { index } from "@react-router/dev/routes";
+import { index, route } from "@react-router/dev/routes";
 
 export default [
     index("routes/home.jsx"),
-    // route("some/path", "./some/file.tsx"),
+    route("base-article", "routes/baseArticle.jsx"),
 ];
