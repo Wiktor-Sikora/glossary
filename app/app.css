@@ -1,7 +1,12 @@
 @import "tailwindcss";
 
+@import url('https://fonts.googleapis.com/css2?family=Miriam+Libre:wght@400..700&display=swap');
+
 @theme{
+    --font-miriam: "Miriam Libre", sans-serif;
+
     --color-navy-blue-magenta: #171522;
     --color-blue-magenta: #33334d;
     --color-rosepink: #e88da3;
+    --color-dark-rosepink: #a46a78
 }
