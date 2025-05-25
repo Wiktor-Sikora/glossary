@@ -18,7 +18,7 @@ function Tile({ img, gif, imgAlt, title, purpose, complexity}) {
   const [isHovered, setIsHovered] = useState(false);
 
   return(
-    <div className="flex flex-col gap-3 rounded-2xl p-5 w-80 border-4 border-[#33334d] 
+    <div className="flex flex-col gap-3 rounded-2xl p-5 w-80 border-4 border-blue-magenta 
     hover:scale-110 ease-in-out duration-200 hover:p-3"
      onMouseEnter={() => setIsHovered(true)}
      onMouseLeave={() => setIsHovered(false)}
@@ -26,11 +26,11 @@ function Tile({ img, gif, imgAlt, title, purpose, complexity}) {
       <img className="scale-90" src={isHovered ? gif ?? img : img} alt={imgAlt}/>
       <div className="flex flex-row justify-between w-full">
           <div className="flex flex-col self-start">
-              <p className="text-xl text-[#e88da3] font-mono font-bold">{title}</p>
-              <p className="text-md text-[#e88da3] font-mono font-bold">{purpose}</p>
+              <p className="text-xl text-rosepink font-mono font-bold">{title}</p>
+              <p className="text-md text-rosepink font-mono font-bold">{purpose}</p>
           </div>
           <div className="flex flex-col self-end">
-              <p className="text-xl text-[#e88da3] font-mono font-bold">{title}</p>
+              <p className="text-xl text-rosepink font-mono font-bold">{title}</p>
           </div>
       </div>
     </div>

@@ -31,7 +31,7 @@ export function Layout({ children }) {
         <Meta />
         <Links />
       </head>
-      <body className="bg-[#171522] text-white">
+      <body className="bg-navy-blue-magenta text-white">
         {children}
         <ScrollRestoration />
         <Scripts />
