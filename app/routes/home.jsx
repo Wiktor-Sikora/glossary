@@ -18,7 +18,8 @@ function Tile({ img, gif, imgAlt, title, purpose, complexity}) {
   const [isHovered, setIsHovered] = useState(false);
 
   return(
-    <div className="flex flex-col gap-3 rounded-2xl p-5 w-80 border-4 border-[#33334d] hover:scale-110 ease-in-out duration-200"
+    <div className="flex flex-col gap-3 rounded-2xl p-5 w-80 border-4 border-[#33334d] 
+    hover:scale-110 ease-in-out duration-200 hover:p-3"
      onMouseEnter={() => setIsHovered(true)}
      onMouseLeave={() => setIsHovered(false)}
     >
@@ -38,7 +39,9 @@ function Tile({ img, gif, imgAlt, title, purpose, complexity}) {
 
 function Tiles() {
   return(
-    <div className="w-[80%] mt-[5%] ml-auto mr-auto grid grid-cols-4 gap-y-10">
+    <div className="w-[80%] mt-[5%] ml-auto mr-auto grid grid-cols-4 gap-y-10
+    md:grid-cols-3 md:scale-90
+    sm:grid-cols-1">
       <Tile title="Sort" purpose="Sorting" img={imgSort} gif={gifSort} imgAlt="Sort"/>
       <Tile title="Option 2" img={imgSearch} gif={gifSearch} imgAlt="Search"/>
       <Tile title="Option 3" img={imgGraph} gif={gifGraph} imgAlt="Graph"/>
