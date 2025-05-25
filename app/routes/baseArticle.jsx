@@ -8,6 +8,17 @@ export function meta() {
     ];
 }
 
+function ArticleHeader() {
+    return(<div className="flex flex-row justify-between w-full">
+        <h1 className="text-5xl font-bold text-rosepink my-auto">Binary Search</h1>
+        <div className="flex flex-col ">
+            <p>Time complexity: <span className="text-rosepink my-auto">O(n)</span></p>
+            <p>Space complexity: <span className="text-rosepink my-auto">O(n)</span></p>
+            <p>Data type: <span className="text-rosepink my-auto">Array</span></p>
+        </div>
+    </div>)
+}
+
 function Visualization({ code }) {
     return(<div className="flex flex-col gap-y-3">
         <h3 className="text-3xl font-bold text-rosepink my-auto">Visualization</h3>
@@ -22,14 +33,6 @@ function CodeSnippet({ code }) {
 function Article() {
     return(
         <article className="flex flex-col gap-y-10 text-lg">
-            <div className="flex flex-row justify-between w-full">
-                <h1 className="text-5xl font-bold text-rosepink my-auto">Binary Search</h1>
-                <div className="flex flex-col ">
-                    <p>Time complexity: <span className="text-rosepink my-auto">O(n)</span></p>
-                    <p>Space complexity: <span className="text-rosepink my-auto">O(n)</span></p>
-                    <p>Data type: <span className="text-rosepink my-auto">Array</span></p>
-                </div>
-            </div>
             <div className="flex flex-col gap-y-3">
                 <h3 className="text-3xl font-bold text-rosepink my-auto">Definition</h3>
                 <p>Binary search is a search algorithm that finds the position of a target value within a sorted array. Binary search compares the target value to the middle element of the array. If they are not equal, the half in which the target cannot lie is eliminated and the search continues on the remaining half until it is successful. If the search ends with the remaining half being empty, the target is not in the array.</p>
@@ -93,7 +96,8 @@ function CodeBlockSection({ codeSnipets }) {
 }
 
 export default function BaseArticle() {
-    return (<section className="w-[80%] mt-[5%] mx-auto flex flex-col gap-y-10 md:scale-90 text-lg">
+    return (<section className="w-[80%] mx-auto flex flex-col gap-y-10 md:scale-90 text-lg">
+        <ArticleHeader />
         <Visualization code={"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Binary_search_example.svg/1200px-Binary_search_example.svg.png"}/>
         <Article />
         <CodeBlockSection codeSnipets={{"python": "def binarySearch(arr, low, high, x):\n" +
