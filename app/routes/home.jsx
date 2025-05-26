@@ -29,7 +29,7 @@ function Tile({ img, gif, imgAlt, title, purpose, complexity}) {
   const [isHovered, setIsHovered] = useState(false);
 
   return(
-    <div className="flex flex-col rounded-2xl p-5 w-80 border-4 border-blue-magenta 
+    <div className="cursor-pointer flex flex-col rounded-2xl p-5 w-80 border-4 border-blue-magenta 
     hover:scale-110 ease-in-out duration-200 hover:p-3
     max-xl:w-80
     lg:w-60

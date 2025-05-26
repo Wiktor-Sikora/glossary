@@ -1,5 +1,6 @@
 import { CodeBlock } from 'react-code-block';
 import { useState } from 'react';
+import { snippets } from "./codeSnippets";
 
 export function meta() {
     return [
@@ -67,13 +68,36 @@ function Article() {
     );
 }
 
-function CodeBlockSection({ codeSnipets }) {
+function CodeBlockSection({ selectedLang, setSelectedLang, codeSnipets }) {
+    const [copied, setCopied] = useState(false);
+
+    const handleClickCopy = () => {
+        navigator.clipboard.writeText(codeSnipets.python);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
+
     return(<div className="flex flex-col gap-y-3">
         <div className="flex flex-col gap-y-3">
             <h3 className="text-3xl font-bold text-rosepink my-auto">Example</h3>
-            <CodeBlock code={codeSnipets.python} language={"python"}>
+            <div className="flex flex-row gap-x-3">
+                {["python", "cpp"].map((lang) => (
+                  <button
+                    key={lang}
+                    onClick={() => setSelectedLang(lang)}
+                    className={`px-4 py-1.5 rounded-3xl font-semibold ${
+                      selectedLang === lang
+                        ? "bg-rosepink text-white"
+                        : "bg-rosepink text-white opacity-25"
+                    }`}
+                  >
+                  </button>
+                ))}
+            </div>
+            <CodeBlock code={codeSnipets[selectedLang]} language={selectedLang}>
+
                 <div className="relative">
-                    <CodeBlock.Code className="bg-gray-900 !p-6 rounded-xl shadow-lg">
+                    <CodeBlock.Code className="bg-navy-blue-magenta border-2 border-blue-magenta !p-6 rounded-xl shadow-lg">
                         <div className="table-row">
                             <CodeBlock.LineNumber className="table-cell pr-4 text-sm text-gray-500 text-right select-none" />
                             <CodeBlock.LineContent className="table-cell">
@@ -83,9 +107,9 @@ function CodeBlockSection({ codeSnipets }) {
                     </CodeBlock.Code>
 
                     <button
-                        className="bg-white text-rosepink rounded-full px-3.5 py-1.5 absolute bottom-2 right-2 text-sm font-semibold hover:scale-110 ease-in-out duration-200"
-                        onClick={() => {navigator.clipboard.writeText(codeSnipets.python)}}
-                    >Copy code</button>
+                        className="cursor-pointer bg-blue-magenta text-rosepink rounded-full px-3.5 py-1.5 absolute bottom-2 right-3 text-sm font-semibold hover:text-base hover:pt-1 hover:scale-105 ease-in-out duration-100"
+                        onClick={handleClickCopy}
+                    >{copied ? "Copied!" : "Copy code"}</button>
                 </div>
             </CodeBlock>
         </div>
@@ -93,29 +117,10 @@ function CodeBlockSection({ codeSnipets }) {
 }
 
 export default function BaseArticle() {
+    const [selectedLang, setSelectedLang] = useState("python");
     return (<section className="w-[80%] mt-[5%] mx-auto flex flex-col gap-y-10 md:scale-90 text-lg">
         <Visualization code={"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Binary_search_example.svg/1200px-Binary_search_example.svg.png"}/>
         <Article />
-        <CodeBlockSection codeSnipets={{"python": "def binarySearch(arr, low, high, x):\n" +
-                "\n" +
-                "    while low <= high:\n" +
-                "\n" +
-                "        mid = low + (high - low) // 2\n" +
-                "\n" +
-                "        # Check if x is present at mid\n" +
-                "        if arr[mid] == x:\n" +
-                "            return mid\n" +
-                "\n" +
-                "        # If x is greater, ignore left half\n" +
-                "        elif arr[mid] < x:\n" +
-                "            low = mid + 1\n" +
-                "\n" +
-                "        # If x is smaller, ignore right half\n" +
-                "        else:\n" +
-                "            high = mid - 1\n" +
-                "\n" +
-                "    # If we reach here, then the element\n" +
-                "    # was not present\n" +
-                "    return -1"}}/>
+        <CodeBlockSection codeSnipets={{[selectedLang]: snippets.binarySearch[selectedLang]}}/>
     </section>) ;
 }
