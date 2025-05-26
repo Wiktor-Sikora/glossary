@@ -1,6 +1,7 @@
 import { CodeBlock } from 'react-code-block';
 import { useState } from 'react';
 import { snippets } from "./codeSnippets";
+import {descriptions} from "./algorithms.jsx"
 
 export function meta() {
     return [
@@ -20,59 +21,46 @@ function CodeSnippet({ code }) {
     return(<code className="bg-gray-800 text-gray-100 border-gray-600 font-mono px-2 py-0.5 rounded-lg border-[1px]">{code}</code>)
 }
 
-function Article() {
+function Article({ algorithmKey }) {
+    const data = descriptions[algorithmKey];
     return(
         <article className="flex flex-col gap-y-10 text-lg">
             <div className="flex flex-row justify-between w-full">
-                <h1 className="text-5xl font-bold text-rosepink my-auto">Binary Search</h1>
+                <h1 className="text-5xl font-bold text-rosepink my-auto">{data.title}</h1>
                 <div className="flex flex-col ">
-                    <p>Time complexity: <span className="text-rosepink my-auto">O(n)</span></p>
-                    <p>Space complexity: <span className="text-rosepink my-auto">O(n)</span></p>
-                    <p>Data type: <span className="text-rosepink my-auto">Array</span></p>
+                    <p>Time complexity: <span className="text-rosepink my-auto">{data.complexity.time}</span></p>
+                    <p>Space complexity: <span className="text-rosepink my-auto">{data.complexity.space}</span></p>
+                    <p>Data type: <span className="text-rosepink my-auto">{data.complexity.type}</span></p>
                 </div>
             </div>
             <div className="flex flex-col gap-y-3">
                 <h3 className="text-3xl font-bold text-rosepink my-auto">Definition</h3>
-                <p>Binary search is a search algorithm that finds the position of a target value within a sorted array. Binary search compares the target value to the middle element of the array. If they are not equal, the half in which the target cannot lie is eliminated and the search continues on the remaining half until it is successful. If the search ends with the remaining half being empty, the target is not in the array.</p>
+                <p>{data.definition}</p>
             </div>
             <div className="flex flex-col gap-y-3">
                 <h3 className="text-3xl font-bold text-rosepink my-auto">Constraints</h3>
-                <ul className="list-disc list-inside">
-                    <li>Data in an array must be sorted</li>
-                </ul>
+                {data.constraints}
             </div>
             <div className="flex flex-col gap-y-3">
                 <h3 className="text-3xl font-bold text-rosepink my-auto">Step-by-step explanation</h3>
                 <h4 className="text-xl text-rosepink">Arguments:</h4>
-                <ul className="list-disc list-inside">
-                    <li>target value - <CodeSnippet code="key"/></li>
-                    <li>Sorted array - <CodeSnippet code="array"/></li>
-                </ul>
+                    {data.arguments}
                 <h4 className="text-xl text-rosepink">Explanation:</h4>
-                <ul className="list-disc list-inside">
-                    <li>Divide search space into two halves, by selecting middle index as <CodeSnippet code="mid"/></li>
-                    <li>Compare <CodeSnippet code="array[mid]"/> with <CodeSnippet code="key"/></li>
-                    <li>If <CodeSnippet code="array[mid]"/> is equal to <CodeSnippet code="key"/> return it's index</li>
-                    <li>If <CodeSnippet code="array[mid]"/> isn't equal to <CodeSnippet code="key"/>, choose next half to be searched</li>
-                    <ul className="ml-12 list-[circle] list-inside">
-                        <li>If <CodeSnippet code="array[mid]"/> is bigger than <CodeSnippet code="key"/>, left side of an <CodeSnippet code="array"/> should be searched</li>
-                        <li>If <CodeSnippet code="array[mid]"/> is smaller than <CodeSnippet code="key"/>, right side of an <CodeSnippet code="array"/> should be searched</li>
-                    </ul>
-                    <li>Repeat until index of <CodeSnippet code="key"/> is found or search space is empty</li>
-                </ul>
+                {data.explanation}
                 <h4 className="text-xl text-rosepink">Returns:</h4>
-                <p>Index of <CodeSnippet code="key"/> or <CodeSnippet code="-1"/> if not found</p>
+                <p>{data.returns}</p>
             </div>
-
         </article>
     );
 }
 
-function CodeBlockSection({ selectedLang, setSelectedLang, codeSnipets }) {
+function CodeBlockSection({ selectedLang, setSelectedLang, isRecursion, setIsRecursion, codeSnipets }) {
     const [copied, setCopied] = useState(false);
 
+    const selectedKey = isRecursion ? `${selectedLang}Rec` : selectedLang;
+
     const handleClickCopy = () => {
-        navigator.clipboard.writeText(codeSnipets.python);
+        navigator.clipboard.writeText(codeSnipets[selectedKey] || "");
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
     };
@@ -85,16 +73,14 @@ function CodeBlockSection({ selectedLang, setSelectedLang, codeSnipets }) {
                   <button
                     key={lang}
                     onClick={() => setSelectedLang(lang)}
-                    className={`px-4 py-1.5 rounded-3xl font-semibold ${
-                      selectedLang === lang
-                        ? "bg-rosepink text-white"
-                        : "bg-rosepink text-white opacity-25"
-                    }`}
+                    className={`px-4 py-1.5 rounded-3xl font-semibold 
+                                ${selectedLang === lang ? "bg-rosepink text-white" : "cursor-pointer border-3 border-blue-magenta text-white opacity-80"}`}
                   >
+                    {lang}
                   </button>
                 ))}
             </div>
-            <CodeBlock code={codeSnipets[selectedLang]} language={selectedLang}>
+             <CodeBlock code={codeSnipets[selectedKey] || "--No code found--"} language={selectedLang}>
 
                 <div className="relative">
                     <CodeBlock.Code className="bg-navy-blue-magenta border-2 border-blue-magenta !p-6 rounded-xl shadow-lg">
@@ -105,6 +91,23 @@ function CodeBlockSection({ selectedLang, setSelectedLang, codeSnipets }) {
                             </CodeBlock.LineContent>
                         </div>
                     </CodeBlock.Code>
+
+                    <div className='flex flex-row absolute top-2 right-3 border border-blue-magenta'>
+                        <button
+                            className={`px-2 py-1 text-base font-semibold 
+                                ${!isRecursion ? "bg-blue-magenta text-white" : "bg-navy-blue-magenta text-white opacity-70"}`}
+                            onClick={() => setIsRecursion(false)}
+                        >
+                            Iteration
+                        </button>
+                        <button
+                            className={`px-2 py-1 text-base font-semibold 
+                                ${isRecursion ? "bg-blue-magenta text-white" : "bg-navy text-white opacity-70"}`}
+                            onClick={() => setIsRecursion(true)}
+                        >
+                            Recursion
+                        </button>
+                    </div>
 
                     <button
                         className="cursor-pointer bg-blue-magenta text-rosepink rounded-full px-3.5 py-1.5 absolute bottom-2 right-3 text-sm font-semibold hover:text-base hover:pt-1 hover:scale-105 ease-in-out duration-100"
@@ -118,9 +121,16 @@ function CodeBlockSection({ selectedLang, setSelectedLang, codeSnipets }) {
 
 export default function BaseArticle() {
     const [selectedLang, setSelectedLang] = useState("python");
+    const [isRecursion, setIsRecursion] = useState(false);
     return (<section className="w-[80%] mt-[5%] mx-auto flex flex-col gap-y-10 md:scale-90 text-lg">
         <Visualization code={"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Binary_search_example.svg/1200px-Binary_search_example.svg.png"}/>
-        <Article />
-        <CodeBlockSection codeSnipets={{[selectedLang]: snippets.binarySearch[selectedLang]}}/>
-    </section>) ;
+        <Article algorithmKey="binarySearch"/>
+        <CodeBlockSection
+        selectedLang={selectedLang}
+        setSelectedLang={setSelectedLang}
+        isRecursion={isRecursion}
+        setIsRecursion={setIsRecursion}
+        codeSnipets={snippets.binarySearch}
+        />
+    </section>);
 }
