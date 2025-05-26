@@ -31,7 +31,8 @@ function Tile({ img, gif, imgAlt, title, purpose, complexity}) {
   return(
     <div className="flex flex-col rounded-2xl p-5 w-80 border-4 border-blue-magenta 
     hover:scale-110 ease-in-out duration-200 hover:p-3
-    2xl:xl:lg:w-80
+    max-xl:w-80
+    lg:w-60
     md:w-50
     max-md:w-60"
      onMouseEnter={() => setIsHovered(true)}
@@ -57,7 +58,7 @@ function Tile({ img, gif, imgAlt, title, purpose, complexity}) {
 function Tiles() {
   return(
     <div className="w-[80%] mt-5 ml-auto mr-auto grid gap-y-10
-    2xl:xl:grid-cols-4
+    lg:grid-cols-4
     md:grid-cols-3
     max-md:grid-cols-2
     max-sm:grid-cols-1 max-sm:w-fit">
