@@ -1,7 +1,6 @@
-import { CodeBlock } from 'react-code-block';
 import { useState } from 'react';
-import { snippets } from "./codeSnippets";
-import {descriptions} from "./algorithms.jsx"
+import { CodeBlock } from 'react-code-block';
+
 import ArrayFrame from '../components/arrayFrame.jsx';
 
 export function meta() {
@@ -11,59 +10,57 @@ export function meta() {
     ];
 }
 
-function Visualization({ code }) {
+export function ArticleHeader({ title, timeComplexity, spaceComplexity, dataType }) {
+    return (<div className="flex flex-row justify-between w-full">
+        <h1 className="text-5xl font-bold text-rosepink my-auto">{ title }</h1>
+        <div className="flex flex-col ">
+            <p>Time complexity: <span className="text-rosepink my-auto">{ timeComplexity }</span></p>
+            <p>Space complexity: <span className="text-rosepink my-auto">{ spaceComplexity }</span></p>
+            <p>Data type: <span className="text-rosepink my-auto">{ dataType }</span></p>
+        </div>
+    </div>)
+}
+
+export function Visualization() {
     return(<div className="flex flex-col gap-y-3">
         <h3 className="text-3xl font-bold text-rosepink my-auto">Visualization</h3>
-        <div className="flex flex-row h-72">
+        <div className="flex flex-row h-72 border-blue-magenta border-2 rounded-xl !p-6 shadow-lg">
             <ArrayFrame />
         </div>
     </div>);
 }
 
-function CodeSnippet({ code }) {
-    return(<code className="bg-gray-800 text-gray-100 border-gray-600 font-mono px-2 py-0.5 rounded-lg border-[1px]">{code}</code>)
-}
-
-function Article({ algorithmKey }) {
-    const data = descriptions[algorithmKey];
+export function Article({ definition, constraints, algorithmArguments, explanation, returns }) {
     return(
         <article className="flex flex-col gap-y-10 text-lg">
-            <div className="flex flex-row justify-between w-full">
-                <h1 className="text-5xl font-bold text-rosepink my-auto">{data.title}</h1>
-                <div className="flex flex-col ">
-                    <p>Time complexity: <span className="text-rosepink my-auto">{data.complexity.time}</span></p>
-                    <p>Space complexity: <span className="text-rosepink my-auto">{data.complexity.space}</span></p>
-                    <p>Data type: <span className="text-rosepink my-auto">{data.complexity.type}</span></p>
-                </div>
-            </div>
             <div className="flex flex-col gap-y-3">
                 <h3 className="text-3xl font-bold text-rosepink my-auto">Definition</h3>
-                <p>{data.definition}</p>
+                <p>{definition}</p>
             </div>
             <div className="flex flex-col gap-y-3">
                 <h3 className="text-3xl font-bold text-rosepink my-auto">Constraints</h3>
-                {data.constraints}
+                {constraints}
             </div>
             <div className="flex flex-col gap-y-3">
                 <h3 className="text-3xl font-bold text-rosepink my-auto">Step-by-step explanation</h3>
                 <h4 className="text-xl text-rosepink">Arguments:</h4>
-                    {data.arguments}
+                {algorithmArguments}
                 <h4 className="text-xl text-rosepink">Explanation:</h4>
-                {data.explanation}
+                {explanation}
                 <h4 className="text-xl text-rosepink">Returns:</h4>
-                <p>{data.returns}</p>
+                <p>{returns}</p>
             </div>
         </article>
     );
 }
 
-function CodeBlockSection({ selectedLang, setSelectedLang, isRecursion, setIsRecursion, codeSnipets }) {
+export function CodeBlockSection({ languages }) {
+    const [selectedLanguage, setSelectedLanguage] = useState(0);
+    const [isRecursion, setIsRecursion] = useState(false);
     const [copied, setCopied] = useState(false);
 
-    const selectedKey = isRecursion ? `${selectedLang}Rec` : selectedLang;
-
     const handleClickCopy = () => {
-        navigator.clipboard.writeText(codeSnipets[selectedKey] || "");
+        navigator.clipboard.writeText(isRecursion ? languages[selectedLanguage].recursive : languages[selectedLanguage].iterative || "");
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
     };
@@ -72,18 +69,18 @@ function CodeBlockSection({ selectedLang, setSelectedLang, isRecursion, setIsRec
         <div className="flex flex-col gap-y-3">
             <h3 className="text-3xl font-bold text-rosepink my-auto">Example</h3>
             <div className="flex flex-row gap-x-3">
-                {["python", "cpp"].map((lang) => (
-                  <button
-                    key={lang}
-                    onClick={() => setSelectedLang(lang)}
-                    className={`px-4 py-1.5 rounded-3xl font-semibold 
-                                ${selectedLang === lang ? "bg-rosepink text-white" : "cursor-pointer border-3 border-blue-magenta text-white opacity-80"}`}
-                  >
-                    {lang}
-                  </button>
+                {languages.map(( language, index ) => (
+                    <button
+                        key={index}
+                        onClick={() => setSelectedLanguage(index)}
+                        className={`px-4 py-1.5 rounded-3xl font-semibold text-center
+                                ${selectedLanguage === index ? "bg-rosepink text-white" : "cursor-pointer border-3 border-blue-magenta text-white opacity-80"}`}
+                    >
+                        {language.language}
+                    </button>
                 ))}
             </div>
-             <CodeBlock code={codeSnipets[selectedKey] || "--No code found--"} language={selectedLang}>
+             <CodeBlock code={isRecursion ? languages[selectedLanguage].recursive : languages[selectedLanguage].iterative || "--No code found--"} language={languages[selectedLanguage].machineLanguage}>
 
                 <div className="relative">
                     <CodeBlock.Code className="bg-navy-blue-magenta border-2 border-blue-magenta !p-6 rounded-xl shadow-lg">
@@ -122,18 +119,11 @@ function CodeBlockSection({ selectedLang, setSelectedLang, isRecursion, setIsRec
     </div>)
 }
 
-export default function BaseArticle() {
-    const [selectedLang, setSelectedLang] = useState("python");
-    const [isRecursion, setIsRecursion] = useState(false);
-    return (<section className="w-[80%] mt-[5%] mx-auto flex flex-col gap-y-10 md:scale-90 text-lg">
-        <Visualization code={"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Binary_search_example.svg/1200px-Binary_search_example.svg.png"}/>
-        <Article algorithmKey="binarySearch"/>
-        <CodeBlockSection
-        selectedLang={selectedLang}
-        setSelectedLang={setSelectedLang}
-        isRecursion={isRecursion}
-        setIsRecursion={setIsRecursion}
-        codeSnipets={snippets.binarySearch}
-        />
+export default function BaseArticle({ description }) {
+    return (<section className="w-[80%] mx-auto flex flex-col gap-y-10 md:scale-90 text-lg">
+        <ArticleHeader title={description.title} timeComplexity={description.complexity.time} spaceComplexity={description.complexity.space} dataType={description.dataTypes} />
+        <Visualization />
+        <Article definition={description.definition} constraints={description.constraints} algorithmArguments={description.arguments} explanation={description.explanation} returns={description.returns} />
+        <CodeBlockSection languages={description.languages} />
     </section>);
 }

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function randomArray(arrayLen = 50, maxValue = 50, minValue = 0) {
+function randomArray(arrayLen = 50, maxValue = 50, minValue = 1) {
     let array = []
     for (let i = 0; i < arrayLen; i++) {
         array.push({
@@ -9,11 +9,11 @@ function randomArray(arrayLen = 50, maxValue = 50, minValue = 0) {
             state: 1
         })
     }
-    console.log(array)
+
     return array;
 }
 
-function Element({ id, value, maxValue, state= 1 }) {
+function Element({ id, onElementClick, value, maxValue, state= 1}) {
     let bgColor = "bg-white"
     if (state === 0) {
         bgColor = "bg-white"
@@ -21,10 +21,10 @@ function Element({ id, value, maxValue, state= 1 }) {
         bgColor = "bg-rosepink"
     }
 
-    return (<div className={`w-full h-[${Math.floor(value / maxValue * 100)}%] ${ bgColor }`} style={{height: Math.floor(value / maxValue * 100) + '%'}} key={id} ></div>)
+    return (<button onClick={onElementClick} className={`w-full ${ bgColor } ${onElementClick !== undefined ? 'hover:bg-dark-rosepink' : ''}`} style={{height: value / maxValue * 100 + '%'}} key={id} ></button>)
 }
 
-export default function ArrayFrame({ arrayLen = 50, maxValue = 50, minValue = 0 }) {
+export default function ArrayFrame({ algorithm='', arrayLen = 50, maxValue = 50, minValue = 0 }) {
     const [elements, setElements] = useState(randomArray(arrayLen, maxValue, minValue).sort((a, b) => a.value - b.value));
 
     return (<div className="flex flex-row items-end gap-1 w-full">
@@ -32,5 +32,4 @@ export default function ArrayFrame({ arrayLen = 50, maxValue = 50, minValue = 0 
             <Element key={element.id} value={element.value} maxValue={maxValue} state={element.state} />
         ))}
     </div>)
-
 }
