@@ -1,5 +1,6 @@
 import { CodeBlock } from 'react-code-block';
 import { useState } from 'react';
+import ArrayFrame from '../components/arrayFrame.jsx';
 
 export function meta() {
     return [
@@ -22,7 +23,9 @@ function ArticleHeader() {
 function Visualization({ code }) {
     return(<div className="flex flex-col gap-y-3">
         <h3 className="text-3xl font-bold text-rosepink my-auto">Visualization</h3>
-        <img src={code} alt="Visualization"/>
+        <div className="flex flex-row h-72">
+            <ArrayFrame />
+        </div>
     </div>);
 }
 
