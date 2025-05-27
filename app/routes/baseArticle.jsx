@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { CodeBlock } from 'react-code-block';
+import { themes } from 'prism-react-renderer';
 
 import ArrayFrame from '../components/arrayFrame.jsx';
 
@@ -80,7 +81,11 @@ export function CodeBlockSection({ languages }) {
                     </button>
                 ))}
             </div>
-             <CodeBlock code={isRecursion ? languages[selectedLanguage].recursive : languages[selectedLanguage].iterative || "--No code found--"} language={languages[selectedLanguage].machineLanguage}>
+             <CodeBlock
+                 code={isRecursion ? languages[selectedLanguage].recursive : languages[selectedLanguage].iterative || "--No code found--"}
+                 language={languages[selectedLanguage].machineLanguage}
+                 theme={themes.dracula}
+             >
 
                 <div className="relative">
                     <CodeBlock.Code className="bg-navy-blue-magenta border-2 border-blue-magenta !p-6 rounded-xl shadow-lg">
