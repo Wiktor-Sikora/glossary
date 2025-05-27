@@ -65,7 +65,7 @@ function Tile({ img, gif, imgAlt, title, purpose, complexity}) {
 function Tiles() {
   return(
     <div className="w-[80%] mt-5 ml-auto mr-auto grid gap-y-10
-    lg:grid-cols-4
+    2xl:grid-cols-4
     md:grid-cols-3
     max-md:grid-cols-2
     max-sm:grid-cols-1 max-sm:w-fit">
