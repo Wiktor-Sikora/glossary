@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from "react-router";
 
 import imgSort from '../assets/home/sort-img.png'
 import gifSort from '../assets/home/sort.gif'
@@ -25,7 +26,7 @@ function Header(){
   )
 }
 
-function Tile({ img, gif, imgAlt, title, purpose, complexity}) {
+function Tile({ path, img, gif, imgAlt, title, purpose, complexity}) {
   const [isHovered, setIsHovered] = useState(false);
 
   const handleClick = () => {
@@ -34,7 +35,8 @@ function Tile({ img, gif, imgAlt, title, purpose, complexity}) {
   };
 
   return(
-    <div className="cursor-pointer flex flex-col rounded-2xl p-5 w-80 border-4 border-blue-magenta 
+    <Link to={path} prefetch="intent"
+          className="cursor-pointer flex flex-col rounded-2xl p-5 w-80 border-4 border-blue-magenta
     hover:scale-110 ease-in-out duration-200 hover:p-3
     xl:w-80
     max-xl:w-80
@@ -58,7 +60,7 @@ function Tile({ img, gif, imgAlt, title, purpose, complexity}) {
               max-sm:text-lg">{complexity}</p>
           </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
@@ -70,7 +72,7 @@ function Tiles() {
     max-md:grid-cols-2
     max-sm:grid-cols-1 max-sm:w-fit">
       <Tile title="Quick sort" purpose="Sorting" complexity="O(n)" img={imgSort} gif={gifSort} imgAlt="Sort"/>
-      <Tile title="Binary search" purpose="Searching" complexity="O(n)" img={imgSearch} gif={gifSearch} imgAlt="Search"/>
+      <Tile path="binary-search" title="Binary search" purpose="Searching" complexity="O(n)" img={imgSearch} gif={gifSearch} imgAlt="Search"/>
       <Tile title="Option 3" img={imgGraph} gif={gifGraph} imgAlt="Graph"/>
       <Tile title="Option 4"/>
       <Tile title="Option 5"/>
