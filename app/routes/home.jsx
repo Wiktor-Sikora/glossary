@@ -29,11 +29,6 @@ function Header(){
 function Tile({ path, img, gif, imgAlt, title, purpose, complexity}) {
   const [isHovered, setIsHovered] = useState(false);
 
-  const handleClick = () => {
-    const key = title.toLowerCase().replace(" ", "-");
-    navigate(`/algorithm/${key}`);
-  };
-
   return(
     <Link to={path} prefetch="intent"
           className="cursor-pointer flex flex-col rounded-2xl p-5 w-80 border-4 border-blue-magenta
@@ -45,7 +40,6 @@ function Tile({ path, img, gif, imgAlt, title, purpose, complexity}) {
     max-md:w-60"
      onMouseEnter={() => setIsHovered(true)}
      onMouseLeave={() => setIsHovered(false)}
-     onClick={handleClick}
     >
       <img className="mb-2 scale-90" src={isHovered ? gif ?? img : img} alt={imgAlt}/>
       <p className="text-xl text-rosepink font-mono font-bold
@@ -71,7 +65,7 @@ function Tiles() {
     md:grid-cols-3
     max-md:grid-cols-2
     max-sm:grid-cols-1 max-sm:w-fit">
-      <Tile title="Quick sort" purpose="Sorting" complexity="O(n)" img={imgSort} gif={gifSort} imgAlt="Sort"/>
+      <Tile path="quick-sort" title="Quick sort" purpose="Sorting" complexity="O(n)" img={imgSort} gif={gifSort} imgAlt="Sort"/>
       <Tile path="binary-search" title="Binary search" purpose="Searching" complexity="O(n)" img={imgSearch} gif={gifSearch} imgAlt="Search"/>
       <Tile title="Option 3" img={imgGraph} gif={gifGraph} imgAlt="Graph"/>
       <Tile title="Option 4"/>
