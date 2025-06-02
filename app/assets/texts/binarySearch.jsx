@@ -2,6 +2,7 @@ import CodeSnippet from "../../components/codeSnippet.jsx";
 
 const description = {
     title: "Binary Search",
+    type: "ArrayFrame",
     complexity: {
         time: "O(n)",
         space: "O(n)",
