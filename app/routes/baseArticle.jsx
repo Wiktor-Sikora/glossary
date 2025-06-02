@@ -25,9 +25,7 @@ export function ArticleHeader({ title, timeComplexity, spaceComplexity, dataType
 export function Visualization() {
     return(<div className="flex flex-col gap-y-3">
         <h3 className="text-3xl font-bold text-rosepink my-auto">Visualization</h3>
-        <div className="flex flex-row h-72 border-blue-magenta border-2 rounded-xl !p-6 shadow-lg">
-            <ArrayFrame />
-        </div>
+        <ArrayFrame />
     </div>);
 }
 

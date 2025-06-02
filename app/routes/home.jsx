@@ -29,11 +29,6 @@ function Header(){
 function Tile({ path, img, gif, imgAlt, title, purpose, complexity}) {
   const [isHovered, setIsHovered] = useState(false);
 
-  const handleClick = () => {
-    const key = title.toLowerCase().replace(" ", "-");
-    navigate(`/algorithm/${key}`);
-  };
-
   return(
     <Link to={path} prefetch="intent"
           className="cursor-pointer flex flex-col rounded-2xl p-5 w-80 border-4 border-blue-magenta
@@ -45,7 +40,6 @@ function Tile({ path, img, gif, imgAlt, title, purpose, complexity}) {
     max-md:w-60"
      onMouseEnter={() => setIsHovered(true)}
      onMouseLeave={() => setIsHovered(false)}
-     onClick={handleClick}
     >
       <img className="mb-2 scale-90" src={isHovered ? gif ?? img : img} alt={imgAlt}/>
       <p className="text-xl text-rosepink font-mono font-bold
