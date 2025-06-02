@@ -60,14 +60,14 @@ function Tile({ path, img, gif, imgAlt, title, purpose, complexity}) {
 
 function Tiles() {
   return(
-    <div className="w-[80%] mt-5 ml-auto mr-auto grid gap-y-10
+    <div className="w-[80%] mt-5 mx-auto grid gap-y-10
     2xl:grid-cols-4
     md:grid-cols-3
     max-md:grid-cols-2
     max-sm:grid-cols-1 max-sm:w-fit">
       <Tile path="quick-sort" title="Quick sort" purpose="Sorting" complexity="O(n)" img={imgSort} gif={gifSort} imgAlt="Sort"/>
-      <Tile path="binary-search" title="Binary search" purpose="Searching" complexity="O(n)" img={imgSearch} gif={gifSearch} imgAlt="Search"/>
-      <Tile title="Option 3" img={imgGraph} gif={gifGraph} imgAlt="Graph"/>
+      <Tile path="binary-search" title="Binary search" purpose="Searching" complexity="O(n*logn)" img={imgSearch} gif={gifSearch} imgAlt="Search"/>
+      <Tile path="dfs" title="DFS" purpose=" " complexity="O(V+E)" img={imgGraph} gif={gifGraph} imgAlt="Graph"/>
       <Tile title="Option 4"/>
       <Tile title="Option 5"/>
       <Tile title="Option 6"/>
