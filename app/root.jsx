@@ -1,3 +1,4 @@
+import { StrictMode } from 'react';
 import {
   isRouteErrorResponse,
   Links,
@@ -24,7 +25,7 @@ import "./app.css";
 
 export function Layout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -37,8 +38,7 @@ export function Layout({ children }) {
         <ScrollRestoration />
         <Scripts />
       </body>
-    </html>
-  );
+    </html>);
 }
 
 export default function App() {

@@ -19,7 +19,7 @@ export function Element({ id, onElementClick, value, maxValue, state= 1}) {
 
     return (<button onClick={onElementClick}
         className={`w-full ${ bgColor } ${onElementClick !== undefined ? 'hover:bg-dark-rosepink' : ''}`}
-        style={{height: value / maxValue * 100 + '%'}} key={id} ></button>)
+        style={{height: (value / maxValue * 100) + '%'}} key={id} ></button>)
 }
 
 export function ArrayFrame({ algorithm='', arrayLen = 50, maxValue = 50, minValue = 0 }) {
@@ -27,7 +27,6 @@ export function ArrayFrame({ algorithm='', arrayLen = 50, maxValue = 50, minValu
         {value: Math.floor(Math.random() * (maxValue - minValue) + minValue), state: 1},
         {value: Math.floor(Math.random() * (maxValue - minValue) + minValue), state: 1}
     ])
-
 
     return (<div className="flex flex-row gap-3 h-72">
         <div className="flex flex-row items-end gap-1 w-full border-blue-magenta border-2 rounded-xl p-3">

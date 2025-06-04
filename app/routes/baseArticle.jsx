@@ -2,8 +2,6 @@ import { useState } from 'react';
 import { CodeBlock } from 'react-code-block';
 import { themes } from 'prism-react-renderer';
 
-import ArrayFrame from '../components/arrayFrame.jsx';
-
 export function meta() {
     return [
         { title: "Algorithm Glossary | Binary Search" },

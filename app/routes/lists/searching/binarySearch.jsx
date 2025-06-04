@@ -1,9 +1,10 @@
-import { useState, useRef, useMemo } from 'react';
+import {useState, useRef, useEffect} from 'react';
 import {Article, ArticleHeader, CodeBlockSection} from "../../baseArticle.jsx";
 import description from "../../../assets/texts/binarySearch.jsx";
 import {Element, SquareButton} from "../../../components/arrayFrame.jsx";
 import svgRandomize from "../../../assets/svg/dice.svg";
-import ExtendedArray from "../../../datatypes/array.js";
+import {generateRandomArray, reorder, changeStateArea} from "../../../datatypes/array.js";
+import {useImmer} from "use-immer";
 
 export function meta() {
   return [
@@ -13,16 +14,61 @@ export function meta() {
 }
 
 function ArrayFrame({ algorithm='', arrayLen = 50, maxValue = 50, minValue = 0 }) {
-    const [elements, setElements] = useState(new ExtendedArray(arrayLen, maxValue, minValue, true));
+    const [elements, setElements] = useImmer(generateRandomArray(arrayLen, maxValue, minValue, true));
+    let elementToBeSearchedValue = useRef(null)
+    let elementToBeSearchedIndex = useRef(null)
 
     function handleRandomize() {
-        console.log('Randomize');
+        setElements(generateRandomArray(arrayLen, maxValue, minValue, true));
+        elementToBeSearchedValue.current = null
+        elementToBeSearchedIndex.current = null
+    }
+
+    async function runAlgorithm() {
+        let low = 0
+        let high = elements.length - 1
+        let mid
+
+        while (high >= low) {
+            mid = low + Math.floor((high - low) / 2)
+
+            if (elements[mid].value === elementToBeSearchedValue.current) {
+                changeStateArea(elements, mid, 2, 0)
+                return
+            }
+
+            if (elements[mid].value > elementToBeSearchedValue.current) {
+                high = mid - 1
+                setElements(draft => {changeStateArea(draft, mid, arrayLen - 1, 0)})
+            } else {
+                low = mid + 1
+                setElements(draft => {changeStateArea(draft, 0, mid, 0)})
+            }
+
+            await new Promise(r => setTimeout(r, 500));
+        }
+    }
+
+    function onElementClick(index, value) {
+        const prevIndex = elementToBeSearchedIndex.current;
+
+        setElements(draft => {
+            if (prevIndex != null) {
+                draft[prevIndex].state = 1
+            }
+
+            draft[index].state = 2
+            elementToBeSearchedValue.current = value
+            elementToBeSearchedIndex.current = index
+        })
+
+        runAlgorithm()
     }
 
     return (<div className="flex flex-row gap-3 h-72">
         <div className="flex flex-row items-end gap-1 w-full border-blue-magenta border-2 rounded-xl p-3">
-            {elements.array.map(element => (
-                <Element value={element.value} maxValue={maxValue} state={element.state} />
+            {elements.map((element, index) => (
+                <Element key={index} onElementClick={() => onElementClick(index, element.value)} value={element.value} maxValue={maxValue} state={element.state} />
             ))}
         </div>
         <div className="flex flex-col gap-3 border-blue-magenta border-2 rounded-xl p-3" >
