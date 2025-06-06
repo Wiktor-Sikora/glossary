@@ -22,7 +22,7 @@ export async function runBFS(startNodeId, edges, visitCallback) {
         visited.add(neighbor);
         queue.push(neighbor);
 
-        await visitCallback(null, edgeId);
+
         await visitCallback(neighbor, edgeId);
       }
     }

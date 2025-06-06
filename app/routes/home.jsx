@@ -67,7 +67,8 @@ function Tiles() {
     max-sm:grid-cols-1 max-sm:w-fit">
       <Tile path="quick-sort" title="Quick sort" purpose="Sorting" complexity="O(n)" img={imgSort} gif={gifSort} imgAlt="Sort"/>
       <Tile path="binary-search" title="Binary search" purpose="Searching" complexity="O(n*logn)" img={imgSearch} gif={gifSearch} imgAlt="Search"/>
-      <Tile path="dfs" title="DFS" purpose=" " complexity="O(V+E)" img={imgGraph} gif={gifGraph} imgAlt="Graph"/>
+      <Tile path="dfs" title="DFS" purpose="Path finding" complexity="O(V+E)" img={imgGraph} gif={gifGraph} imgAlt="Graph"/>
+      <Tile path="bfs" title="BFS" purpose="Path finding" complexity="O(V+E)" img={imgGraph} gif={gifGraph} imgAlt="Graph"/>
       <Tile title="Option 4"/>
       <Tile title="Option 5"/>
       <Tile title="Option 6"/>
