@@ -43,34 +43,42 @@ export const description = {
         {
             language: "C++",
             machineLanguage: "cpp",
-            iterative: `void DFS(vector<vector<int>>& graph, int start) {
-    vector<bool> visited(graph.size(), false);
-    stack<int> s;
+            iterative: `#include <iostream>
+#include <vector>
+#include <stack>
+
+void dfs(int start, const std::vector<std::vector<int>>& adj, std::vector<bool>& visited) {
+    std::stack<int> s;
     s.push(start);
-    
+
     while (!s.empty()) {
-        int node = s.top();
+        int u = s.top();
         s.pop();
-        
-        if (!visited[node]) {
-            visited[node] = true;
-            // Process node here
-            
-            for (int neighbor : graph[node]) {
-                if (!visited[neighbor]) {
-                    s.push(neighbor);
+
+        if (!visited[u]) {
+            visited[u] = true;
+            std::cout << u << " ";
+
+            // Dodajemy sąsiadów w odwrotnej kolejności, aby zachować zgodność z DFS rekurencyjnym
+            for (auto it = adj[u].rbegin(); it != adj[u].rend(); ++it) {
+                if (!visited[*it]) {
+                    s.push(*it);
                 }
             }
         }
     }
-}`,
-            recursive: `void DFS(vector<vector<int>>& graph, int node, vector<bool>& visited) {
-    visited[node] = true;
-    // Process node here
-    
-    for (int neighbor : graph[node]) {
-        if (!visited[neighbor]) {
-            DFSRecursive(graph, neighbor, visited);
+}
+`,
+            recursive: `#include <iostream>
+#include <vector>
+
+void dfs(int u, const std::vector<std::vector<int>>& adj, std::vector<bool>& visited) {
+    visited[u] = true;
+    std::cout << u << " ";
+
+    for (int v : adj[u]) {
+        if (!visited[v]) {
+            dfs(v, adj, visited);
         }
     }
 }`
@@ -78,26 +86,27 @@ export const description = {
         {
             language: "Python",
             machineLanguage: "python",
-            iterative: `def dfs(graph, start):
-    visited = [False] * len(graph)
+            iterative: `def dfs(start, adj, visited):
     stack = [start]
-    
+
     while stack:
-        node = stack.pop()
-        if not visited[node]:
-            visited[node] = True
-            # Process node here
-            
-            for neighbor in graph[node]:
-                if not visited[neighbor]:
-                    stack.append(neighbor)`,
-            recursive: `def dfs(graph, node, visited):
-    visited[node] = True
-    # Process node here
+        u = stack.pop()
+        if not visited[u]:
+            visited[u] = True
+            print(u, end=' ')
+
+            # Dodajemy sąsiadów w odwrotnej kolejności, żeby uzyskać ten sam porządek co w rekurencyjnym DFS
+            for v in reversed(adj[u]):
+                if not visited[v]:
+                    stack.append(v)
+`,
+            recursive: `def dfs(u, adj, visited):
+    visited[u] = True
+    print(u, end=' ')
     
-    for neighbor in graph[node]:
-        if not visited[neighbor]:
-            dfs_recursive(graph, neighbor, visited)`
+    for v in adj[u]:
+        if not visited[v]:
+            dfs(v, adj, visited)`
         }
     ]
 }

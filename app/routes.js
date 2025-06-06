@@ -5,4 +5,5 @@ export default [
     route("binary-search", "routes/lists/searching/binarySearch.jsx"),
     route("quick-sort", "routes/lists/sorting/quickSort.jsx"),
     route("dfs", "routes/lists/graphs/dfs.jsx"),
+    route("bfs", "routes/lists/graphs/bfs.jsx"),
 ];
