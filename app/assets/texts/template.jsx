@@ -2,6 +2,7 @@ import CodeSnippet from "../../components/codeSnippet.jsx";
 
 export const description = {
     title: "",
+    type: "ArrayFrame",
     complexity: {
         time: "O(n)",
         space: "O(n)",
@@ -34,13 +35,17 @@ export const description = {
     languages: [
         {
             language: "C++",
+            machineLanguage: "cpp",
             iterative: `...`,
             recursive: `...`
         },
         {
             language: "Python",
+            machineLanguage: "python",
             iterative: `...`,
             recursive: `...`
         }
     ]
 }
+
+export default description;

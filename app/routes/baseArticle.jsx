@@ -1,12 +1,23 @@
 import { useState } from 'react';
 import { CodeBlock } from 'react-code-block';
 import { themes } from 'prism-react-renderer';
+import { Link } from "react-router";
+import { ArrayFrame } from '../components/arrayFrame.jsx';
+import GraphFrame from '../components/graphFrame.jsx';
 
 export function meta() {
     return [
         { title: "Algorithm Glossary | Binary Search" },
         { name: "description", content: "A collection of various algorithms | Binary Search article" },
     ];
+}
+
+export function Return(){
+    return(
+        <div className="relative">
+            <Link to="/" className="fixed top-10 left-15 border-2 border-blue-magenta px-2 text-2xl pb-1 rounded-xl font-semibold">{`<`}</Link>
+        </div>
+    )
 }
 
 export function ArticleHeader({ title, timeComplexity, spaceComplexity, dataType }) {
@@ -20,10 +31,12 @@ export function ArticleHeader({ title, timeComplexity, spaceComplexity, dataType
     </div>)
 }
 
-export function Visualization() {
+export function Visualization({ type, algorithm }){
     return(<div className="flex flex-col gap-y-3">
         <h3 className="text-3xl font-bold text-rosepink my-auto">Visualization</h3>
-        <ArrayFrame />
+        <div className={`flex flex-row ${type==="ArrayFrame" ? "h-72" : "h-102"} border-blue-magenta border-2 rounded-xl !p-6 shadow-lg`}>
+            {type === "ArrayFrame" ? <ArrayFrame /> : <GraphFrame algorithm={algorithm}/>}
+        </div>
     </div>);
 }
 
@@ -121,10 +134,14 @@ export function CodeBlockSection({ languages }) {
 }
 
 export default function BaseArticle({ description }) {
-    return (<section className="w-[80%] mx-auto flex flex-col gap-y-10 md:scale-90 text-lg">
+    return (
+    <>
+    <Return />
+    <section className="w-[80%] mx-auto flex flex-col gap-y-10 md:scale-90 text-lg">
         <ArticleHeader title={description.title} timeComplexity={description.complexity.time} spaceComplexity={description.complexity.space} dataType={description.dataTypes} />
-        <Visualization />
-        <Article definition={description.definition} constraints={description.constraints} algorithmArguments={description.arguments} explanation={description.explanation} returns={description.returns} />
+        <Visualization type={description.type} algorithm={description.title} />
+        <Article definition={description.definition} constraints={description.constraints} algorithmArguments={description.arguments} explanation={description.explanation} returns={description.returns}/>
         <CodeBlockSection languages={description.languages} />
-    </section>);
+    </section>
+    </>);
 }

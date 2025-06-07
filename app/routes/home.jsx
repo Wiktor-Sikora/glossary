@@ -60,19 +60,23 @@ function Tile({ path, img, gif, imgAlt, title, purpose, complexity}) {
 
 function Tiles() {
   return(
-    <div className="w-[80%] mt-5 ml-auto mr-auto grid gap-y-10
+    <div className="w-[80%] mt-5 mx-auto grid gap-y-10
     2xl:grid-cols-4
     md:grid-cols-3
     max-md:grid-cols-2
     max-sm:grid-cols-1 max-sm:w-fit">
-      <Tile title="Quick sort" purpose="Sorting" complexity="O(n)" img={imgSort} gif={gifSort} imgAlt="Sort"/>
-      <Tile path="binary-search" title="Binary search" purpose="Searching" complexity="O(n)" img={imgSearch} gif={gifSearch} imgAlt="Search"/>
-      <Tile title="Option 3" img={imgGraph} gif={gifGraph} imgAlt="Graph"/>
-      <Tile title="Option 4"/>
-      <Tile title="Option 5"/>
-      <Tile title="Option 6"/>
-      <Tile title="Option 7"/>
-      <Tile title="Option 8"/>
+      <Tile path="bubble-sort" title="Bubble sort" purpose="Sorting" complexity="O(n²)" img={imgSort} gif={gifSort} imgAlt="Sort"/>
+      <Tile path="heap-sort" title="Heap sort" purpose="Sorting" complexity="O(nlog n)" img={imgSort} gif={gifSort} imgAlt="Sort"/>
+      <Tile path="insertion-sort" title="Insertion sort" purpose="Sorting" complexity="O(n²)" img={imgSort} gif={gifSort} imgAlt="Sort"/>
+      <Tile path="merge-sort" title="Merge sort" purpose="Sorting" complexity="O(nlog n)" img={imgSort} gif={gifSort} imgAlt="Sort"/>
+      <Tile path="quick-sort" title="Quick sort" purpose="Sorting" complexity="O(nlog n)" img={imgSort} gif={gifSort} imgAlt="Sort"/>
+      <Tile path="binary-search" title="Binary search" purpose="Searching" complexity="O(log n)" img={imgSearch} gif={gifSearch} imgAlt="Search"/>
+      <Tile path="interpolation-search" title="Interpolation search" purpose="Searching" complexity="O(loglog n)" img={imgSearch} gif={gifSearch} imgAlt="Search"/>
+      <Tile path="jump-search" title="Jump search" purpose="Searching" complexity="O(loglog n)" img={imgSearch} gif={gifSearch} imgAlt="Search"/>
+      <Tile path="a-star" title="A*" purpose="Path finding" complexity="O(V+E)" img={imgGraph} gif={gifGraph} imgAlt="Graph"/>
+      <Tile path="bfs" title="BFS" purpose="Path finding" complexity="O(V+E)" img={imgGraph} gif={gifGraph} imgAlt="Graph"/>
+      <Tile path="dijkstra" title="Dijkstra" purpose="Path finding" complexity="O((V+E)logV)" img={imgGraph} gif={gifGraph} imgAlt="Graph"/>
+      <Tile path="dfs" title="DFS" purpose="Path finding" complexity="O(V+E)" img={imgGraph} gif={gifGraph} imgAlt="Graph"/>
     </div>
   );
 }
