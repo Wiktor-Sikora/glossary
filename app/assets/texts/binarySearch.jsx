@@ -4,8 +4,8 @@ const description = {
     title: "Binary Search",
     type: "ArrayFrame",
     complexity: {
-        time: "O(n)",
-        space: "O(n)",
+        time: "O(log n)",
+        space: "O(1)",
     },
     dataTypes: ["Arrays"],
     definition:(

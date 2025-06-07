@@ -2,6 +2,7 @@ import CodeSnippet from "../../components/codeSnippet.jsx";
 
 export const description = {
     title: "Quick Sort",
+    type: "ArrayFrame",
     complexity: {
         time: "O(n log n)",
         space: "O(log n)",
