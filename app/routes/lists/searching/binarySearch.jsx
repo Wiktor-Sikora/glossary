@@ -1,10 +1,14 @@
 import {useState, useRef, useEffect} from 'react';
 import {Article, ArticleHeader, CodeBlockSection} from "../../baseArticle.jsx";
 import description from "../../../assets/texts/binarySearch.jsx";
-import {Element, SquareButton} from "../../../components/arrayFrame.jsx";
-import svgRandomize from "../../../assets/svg/dice.svg";
+import {Element, SquareButton, getSpacing} from "../../../components/arrayComponents.jsx";
 import {generateRandomArray, reorder, changeStateArea} from "../../../datatypes/array.js";
 import {useImmer} from "use-immer";
+import { IconContext } from "react-icons";
+import {CgDice5} from "react-icons/cg";
+import { TbArrowsShuffle } from "react-icons/tb";
+
+
 
 export function meta() {
   return [
@@ -15,64 +19,105 @@ export function meta() {
 
 function ArrayFrame({ algorithm='', arrayLen = 50, maxValue = 50, minValue = 0 }) {
     const [elements, setElements] = useImmer(generateRandomArray(arrayLen, maxValue, minValue, true));
-    let elementToBeSearchedValue = useRef(null)
-    let elementToBeSearchedIndex = useRef(null)
+    const [comparisons, setComparisons] = useState(0)
+    const [delay, setDelay] = useState(250)
+    const shouldRun = useRef(false)
+    const elementToBeSearchedValue = useRef(null)
+    const elementToBeSearchedIndex = useRef(null)
+    const [elementFoundIndex, setElementFoundIndex] = useState(null)
 
     function handleRandomize() {
-        setElements(generateRandomArray(arrayLen, maxValue, minValue, true));
+        shouldRun.current = false
+        setElementFoundIndex(null)
         elementToBeSearchedValue.current = null
         elementToBeSearchedIndex.current = null
+        setComparisons(0)
+
+        setElements(generateRandomArray(arrayLen, maxValue, minValue, true))
     }
 
     async function runAlgorithm() {
+        setComparisons(0)
+        shouldRun.current = true
+
         let low = 0
         let high = elements.length - 1
         let mid
 
-        while (high >= low) {
-            mid = low + Math.floor((high - low) / 2)
+        while (high >= low && shouldRun.current) {
+            mid = Math.floor((low + high) / 2)
+            setElements(draft => {draft[mid].state = 3})
+
+            if (shouldRun.current) {
+                await new Promise((r) => setTimeout(r, delay))
+            } else {
+                return
+            }
 
             if (elements[mid].value === elementToBeSearchedValue.current) {
-                changeStateArea(elements, mid, 2, 0)
+                if (mid !== 0) {setElements(draft => {changeStateArea(draft, 0, mid - 1, 0)})}
+                if (mid !== elements.length - 1) {setElements((draft) => {changeStateArea(draft, mid + 1, elements.length - 1, 0)})}
+                shouldRun.current = false
+                setElementFoundIndex(mid)
+                return
+            }
+            setComparisons(comparisons => comparisons + 1)
+
+            if (shouldRun.current) {
+                await new Promise((r) => setTimeout(r, delay))
+            } else {
                 return
             }
 
             if (elements[mid].value > elementToBeSearchedValue.current) {
                 high = mid - 1
-                setElements(draft => {changeStateArea(draft, mid, arrayLen - 1, 0)})
+                setElements(draft => {changeStateArea(draft, high, arrayLen - 1, 0)})
             } else {
                 low = mid + 1
-                setElements(draft => {changeStateArea(draft, 0, mid, 0)})
+                setElements(draft => {changeStateArea(draft, 0, low, 0)})
             }
-
-            await new Promise(r => setTimeout(r, 500));
+            setComparisons(comparisons => comparisons + 1)
         }
+
+        shouldRun.current = false
     }
 
     function onElementClick(index, value) {
-        const prevIndex = elementToBeSearchedIndex.current;
+        shouldRun.current = false
 
         setElements(draft => {
-            if (prevIndex != null) {
-                draft[prevIndex].state = 1
-            }
+            changeStateArea(draft, 0, arrayLen - 1, 1)
 
             draft[index].state = 2
-            elementToBeSearchedValue.current = value
-            elementToBeSearchedIndex.current = index
         })
 
-        runAlgorithm()
+        elementToBeSearchedIndex.current = index
+        elementToBeSearchedValue.current = value
+
+        return runAlgorithm()
     }
 
     return (<div className="flex flex-row gap-3 h-72">
-        <div className="flex flex-row items-end gap-1 w-full border-blue-magenta border-2 rounded-xl p-3">
-            {elements.map((element, index) => (
-                <Element key={index} onElementClick={() => onElementClick(index, element.value)} value={element.value} maxValue={maxValue} state={element.state} />
-            ))}
+        <div className={'flex flex-col gap-1 w-full border-blue-magenta border-2 rounded-xl p-3'}>
+            <div className={'flex flex-row w-full gap-3'}>
+                <p>Comparisons: {comparisons}</p>
+                <p>Delay: {delay}ms</p>
+                {elementToBeSearchedValue.current ? <p>Value to Search: {elementToBeSearchedValue.current}</p> : null}
+                {elementFoundIndex ? <p>Found at index {elementFoundIndex}</p> : null }
+            </div>
+            <div className={`flex flex-row items-end w-full h-full gap-${getSpacing(arrayLen)}`}>
+                {elements.map((element, index) => (
+                    <Element key={element.id} onElementClick={() => onElementClick(index, element.value)} value={element.value} maxValue={maxValue} state={element.state} />
+                ))}
+            </div>
         </div>
-        <div className="flex flex-col gap-3 border-blue-magenta border-2 rounded-xl p-3" >
-            <SquareButton imgSrc={svgRandomize} onButtonClick={handleRandomize} alt={"Randomize Array"}/>
+        <div className="flex flex-col gap-3 border-blue-magenta border-2 rounded-xl p-3">
+            <SquareButton onButtonClick={handleRandomize} alt={"Randomize Array"}>
+                <IconContext.Provider value={{size: "3rem" }}><CgDice5 /></IconContext.Provider>
+            </SquareButton>
+            <SquareButton alt={"Shuffle Array"}>
+                <IconContext.Provider value={{size: "3rem" }}><TbArrowsShuffle /></IconContext.Provider>
+            </SquareButton>
         </div>
     </div>)
 }

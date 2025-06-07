@@ -5,7 +5,8 @@ export function generateRandomArray(length, maxValue = 50, minValue = 1, shouldB
 
     for (let i = 0; i < array.length; i++) {
         array[i] = {
-            value: Math.floor(Math.random() * (maxValue - minValue) + minValue),
+            id: crypto.randomUUID(),
+            value: Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue,
             state: 1
         }
     }
@@ -18,11 +19,11 @@ export function generateRandomArray(length, maxValue = 50, minValue = 1, shouldB
 }
 
 export function changeStateArea(array, startIndex, endIndex, stateValue) {
-    for (let i = startIndex; i < endIndex; i++) {
+    for (let i = startIndex; i <= endIndex; i++) {
         array[i].state = stateValue;
     }
 
-    return array
+    // return array
 }
 
 export function reorder(array) {
