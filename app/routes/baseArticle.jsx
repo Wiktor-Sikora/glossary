@@ -2,8 +2,7 @@ import { useState } from 'react';
 import { CodeBlock } from 'react-code-block';
 import { themes } from 'prism-react-renderer';
 import { Link } from "react-router";
-
-import ArrayFrame from '../components/arrayFrame.jsx';
+import { ArrayFrame } from '../components/arrayFrame.jsx';
 import GraphFrame from '../components/graphFrame.jsx';
 
 export function meta() {

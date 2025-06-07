@@ -1,6 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Miriam+Libre:wght@400..700&display=swap');
 @import "tailwindcss";
 
-@import url('https://fonts.googleapis.com/css2?family=Miriam+Libre:wght@400..700&display=swap');
 
 @theme{
     --font-miriam: "Miriam Libre", sans-serif;
