@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { CodeBlock } from 'react-code-block';
 import { themes } from 'prism-react-renderer';
 import { Link } from "react-router";
-import { ArrayFrame } from '../components/arrayFrame.jsx';
+import { ArrayComponent } from '../components/arrayComponents.jsx';
 import GraphFrame from '../components/graphFrame.jsx';
 
 export function meta() {
@@ -35,7 +35,7 @@ export function Visualization({ type, algorithm }){
     return(<div className="flex flex-col gap-y-3">
         <h3 className="text-3xl font-bold text-rosepink my-auto">Visualization</h3>
         <div className={`flex flex-row ${type==="ArrayFrame" ? "h-72" : "h-102"} border-blue-magenta border-2 rounded-xl !p-6 shadow-lg`}>
-            {type === "ArrayFrame" ? <ArrayFrame /> : <GraphFrame algorithm={algorithm}/>}
+            {type === "ArrayFrame" ? <ArrayComponent /> : <GraphFrame algorithm={algorithm}/>}
         </div>
     </div>);
 }

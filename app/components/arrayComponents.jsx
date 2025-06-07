@@ -39,7 +39,7 @@ export function Element({ id, onElementClick, value, maxValue, state= 1}) {
         style={{height: height.current+'%'}} key={id} ></button>)
 }
 
-export function ArrayComponents({ algorithm='', arrayLen = 50, maxValue = 50, minValue = 0 }) {
+export function ArrayComponent({ algorithm='', arrayLen = 50, maxValue = 50, minValue = 0 }) {
     const [elements, setElements] = useState([
         {value: Math.floor(Math.random() * (maxValue - minValue) + minValue), state: 1},
         {value: Math.floor(Math.random() * (maxValue - minValue) + minValue), state: 1}
