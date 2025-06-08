@@ -44,6 +44,7 @@ function ArrayFrame({ arrayLen = 50, maxValue = 50, minValue = 0 }) {
     async function runAlgorithm() {
         setComparisons(0)
         shouldRun.current = true
+        setElementFoundIndex(null)
 
         let low = 0
         let high = elements.length - 1

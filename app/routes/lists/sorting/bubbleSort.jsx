@@ -23,28 +23,31 @@ function ArrayFrame({ arrayLen = 50, maxValue = 50, minValue = 0 }) {
     const [delay, setDelay] = useState(250)
     const shouldRun = useRef(false)
 
-    const [elementFoundIndex, setElementFoundIndex] = useState(null)
-    const elementToBeSearchedValue = useRef(null)
-    const elementToBeSearchedIndex = useRef(null)
-
     function handleArrayLengthChange(length) {
         setArrayLength(length)
 
         handleRandomize(length)
     }
 
+    function handleReorder() {
+        shouldRun.current = false
+        setComparisons(0)
+        setReorders(0)
+
+        setElements(draft => {reorder(draft)})
+    }
+
     function handleRandomize(length) {
         shouldRun.current = false
-        setElementFoundIndex(null)
-        elementToBeSearchedValue.current = null
-        elementToBeSearchedIndex.current = null
         setComparisons(0)
+        setReorders(0)
 
         setElements(generateRandomArray(length, maxValue, minValue))
     }
 
     async function runAlgorithm() {
         setComparisons(0)
+        setReorders(0)
         shouldRun.current = true
 
         let low = 0
@@ -98,9 +101,6 @@ function ArrayFrame({ arrayLen = 50, maxValue = 50, minValue = 0 }) {
             draft[index].state = 2
         })
 
-        elementToBeSearchedIndex.current = index
-        elementToBeSearchedValue.current = value
-
         return runAlgorithm()
     }
 
@@ -111,12 +111,10 @@ function ArrayFrame({ arrayLen = 50, maxValue = 50, minValue = 0 }) {
                 <p>Reorders: {reorders}</p>
                 <p>Delay: {delay}ms</p>
                 <p>Items: {arrayLength}</p>
-                {elementToBeSearchedValue.current ? <p>Value to Search: {elementToBeSearchedValue.current}</p> : null}
-                {elementFoundIndex ? <p>Found at index {elementFoundIndex}</p> : null }
             </div>
             <div className={`flex flex-row items-end w-full h-full`}>
                 {elements.map((element, index) => (
-                    <Element key={element.id} onElementClick={() => onElementClick(index, element.value)} value={element.value} maxValue={maxValue} state={element.state} />
+                    <Element key={element.id} value={element.value} maxValue={maxValue} state={element.state} />
                 ))}
             </div>
         </div>
@@ -124,7 +122,7 @@ function ArrayFrame({ arrayLen = 50, maxValue = 50, minValue = 0 }) {
             <SquareButton onButtonClick={() => handleRandomize(arrayLength)} alt={"Randomize Array"}>
                 <IconContext.Provider value={{size: "3rem" }}><CgDice5 /></IconContext.Provider>
             </SquareButton>
-            <SquareButton alt={"Shuffle Array"}>
+            <SquareButton onButtonClick={() => handleReorder()} alt={"Shuffle Array"}>
                 <IconContext.Provider value={{size: "3rem" }}><TbArrowsShuffle /></IconContext.Provider>
             </SquareButton>
             <RangeInput description={"Delay:"} initialValue={delay} minValue={1} maxValue={1000} onChange={(e) => setDelay(Number(e.target.value))} />
