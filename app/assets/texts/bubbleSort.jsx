@@ -9,7 +9,7 @@ export const description = {
     },
     dataTypes: ["Arrays"],
     definition:(<>
-
+        Bubble Sort is a simple comparison-based sorting algorithm. It works by repeatedly stepping through the list, comparing adjacent elements, and swapping them if they are in the wrong order. This process is repeated until the list is sorted.
     </>),
     constraints:(
         <ul className="list-disc list-inside">

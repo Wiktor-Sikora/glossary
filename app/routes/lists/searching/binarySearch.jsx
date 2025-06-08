@@ -1,14 +1,12 @@
-import {useState, useRef, useEffect} from 'react';
+import {useState, useRef} from 'react';
 import {Article, ArticleHeader, CodeBlockSection} from "../../baseArticle.jsx";
 import description from "../../../assets/texts/binarySearch.jsx";
-import {Element, SquareButton, getSpacing} from "../../../components/arrayComponents.jsx";
-import {generateRandomArray, reorder, changeStateArea} from "../../../datatypes/array.js";
+import {Element, SquareButton, RangeInput} from "../../../components/arrayComponents.jsx";
+import {generateRandomArray, changeStateArea} from "../../../datatypes/array.js";
 import {useImmer} from "use-immer";
 import { IconContext } from "react-icons";
 import {CgDice5} from "react-icons/cg";
 import { TbArrowsShuffle } from "react-icons/tb";
-
-
 
 export function meta() {
   return [
@@ -17,8 +15,9 @@ export function meta() {
   ];
 }
 
-function ArrayFrame({ algorithm='', arrayLen = 50, maxValue = 50, minValue = 0 }) {
-    const [elements, setElements] = useImmer(generateRandomArray(arrayLen, maxValue, minValue, true));
+function ArrayFrame({ arrayLen = 50, maxValue = 50, minValue = 0 }) {
+    const [arrayLength, setArrayLength] = useState(arrayLen)
+    const [elements, setElements] = useImmer(generateRandomArray(arrayLength, maxValue, minValue, true));
     const [comparisons, setComparisons] = useState(0)
     const [delay, setDelay] = useState(250)
     const shouldRun = useRef(false)
@@ -26,14 +25,20 @@ function ArrayFrame({ algorithm='', arrayLen = 50, maxValue = 50, minValue = 0 }
     const elementToBeSearchedIndex = useRef(null)
     const [elementFoundIndex, setElementFoundIndex] = useState(null)
 
-    function handleRandomize() {
+    function handleArrayLengthChange(length) {
+        setArrayLength(length)
+
+        handleRandomize(length)
+    }
+
+    function handleRandomize(length) {
         shouldRun.current = false
         setElementFoundIndex(null)
         elementToBeSearchedValue.current = null
         elementToBeSearchedIndex.current = null
         setComparisons(0)
 
-        setElements(generateRandomArray(arrayLen, maxValue, minValue, true))
+        setElements(generateRandomArray(length, maxValue, minValue, true))
     }
 
     async function runAlgorithm() {
@@ -71,12 +76,12 @@ function ArrayFrame({ algorithm='', arrayLen = 50, maxValue = 50, minValue = 0 }
 
             if (elements[mid].value > elementToBeSearchedValue.current) {
                 high = mid - 1
-                setElements(draft => {changeStateArea(draft, high, arrayLen - 1, 0)})
+                setElements(draft => {changeStateArea(draft, high + 1, arrayLength - 1, 0)})
             } else {
                 low = mid + 1
-                setElements(draft => {changeStateArea(draft, 0, low, 0)})
+                setElements(draft => {changeStateArea(draft, 0, low - 1, 0)})
             }
-            setComparisons(comparisons => comparisons + 1)
+            setComparisons(comparisons => comparisons + 2)
         }
 
         shouldRun.current = false
@@ -86,7 +91,7 @@ function ArrayFrame({ algorithm='', arrayLen = 50, maxValue = 50, minValue = 0 }
         shouldRun.current = false
 
         setElements(draft => {
-            changeStateArea(draft, 0, arrayLen - 1, 1)
+            changeStateArea(draft, 0, arrayLength - 1, 1)
 
             draft[index].state = 2
         })
@@ -102,22 +107,25 @@ function ArrayFrame({ algorithm='', arrayLen = 50, maxValue = 50, minValue = 0 }
             <div className={'flex flex-row w-full gap-3'}>
                 <p>Comparisons: {comparisons}</p>
                 <p>Delay: {delay}ms</p>
+                <p>Items: {arrayLength}</p>
                 {elementToBeSearchedValue.current ? <p>Value to Search: {elementToBeSearchedValue.current}</p> : null}
                 {elementFoundIndex ? <p>Found at index {elementFoundIndex}</p> : null }
             </div>
-            <div className={`flex flex-row items-end w-full h-full gap-${getSpacing(arrayLen)}`}>
+            <div className={`flex flex-row items-end w-full h-full`}>
                 {elements.map((element, index) => (
                     <Element key={element.id} onElementClick={() => onElementClick(index, element.value)} value={element.value} maxValue={maxValue} state={element.state} />
                 ))}
             </div>
         </div>
-        <div className="flex flex-col gap-3 border-blue-magenta border-2 rounded-xl p-3">
-            <SquareButton onButtonClick={handleRandomize} alt={"Randomize Array"}>
+        <div className="grid grid-cols-2 gap-3 border-blue-magenta place-items-center border-2 rounded-xl p-3">
+            <SquareButton onButtonClick={() => handleRandomize(arrayLength)} alt={"Randomize Array"}>
                 <IconContext.Provider value={{size: "3rem" }}><CgDice5 /></IconContext.Provider>
             </SquareButton>
             <SquareButton alt={"Shuffle Array"}>
                 <IconContext.Provider value={{size: "3rem" }}><TbArrowsShuffle /></IconContext.Provider>
             </SquareButton>
+            <RangeInput description={"Delay:"} initialValue={delay} minValue={1} maxValue={1000} onChange={(e) => setDelay(Number(e.target.value))} />
+            <RangeInput description={"items:"} initialValue={arrayLength} minValue={10} maxValue={500} onChange={(e) => {handleArrayLengthChange(Number(e.target.value))}} />
         </div>
     </div>)
 }

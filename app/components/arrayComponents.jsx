@@ -1,17 +1,17 @@
-import { useState, useRef, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import {CgDice5} from "react-icons/cg";
 
 export function getSpacing(arrayLength) {
     if (arrayLength <= 80) {
         return 1
     } else if (arrayLength <= 120) {
-        return 0.5
+        return 0.75
     } else {
         return 0;
     }
 }
 
-export function SquareButton({children, onButtonClick, alt="button"}) {
+export function SquareButton({children, onButtonClick}) {
     return (<button onClick={onButtonClick}
         className={`duration-200 ${onButtonClick !== undefined ? 'text-rosepink hover:scale-110' : 'text-blue-magenta'}`}
     >
@@ -19,8 +19,22 @@ export function SquareButton({children, onButtonClick, alt="button"}) {
     </button>)
 }
 
+export function RangeInput({description, initialValue, minValue, maxValue, onChange}) {
+    return (<div className="col-span-full w-full flex flex-col gap-1">
+        <label className="text-xl w-full font-bold text-rosepink">{description}
+            <input className={"w-full bg-navy-blue-magenta border-blue-magenta border-2 rounded-2xl accent-rosepink appearance-none cursor-pointer"}
+                   type="range"
+                   min={minValue}
+                   max={maxValue}
+                   value={initialValue}
+                   onChange={onChange}
+            />
+        </label>
+    </div>)
+}
+
 export function Element({ id, onElementClick, value, maxValue, state= 1}) {
-    const height = useRef((value / maxValue) * 100)
+    const height = useMemo( () =>(value / maxValue) * 100, [value, maxValue])
     const bgColor = useMemo(() => {
         if (state === 0) {
             return "bg-blue-magenta"
@@ -29,14 +43,14 @@ export function Element({ id, onElementClick, value, maxValue, state= 1}) {
         } else if (state === 2) {
             return "bg-rosepink"
         } else if (state === 3) {
-            return "bg-white outline-4 outline-rosepink outline-dotted"
+            return "bg-white outline-4 outline-rosepink outline-dotted -outline-offset-4"
         }
 
     }, [state])
 
     return (<button onClick={onElementClick}
         className={`w-full ${ bgColor } ${onElementClick !== undefined && state !== 2 ? 'hover:bg-dark-rosepink' : ''}`}
-        style={{height: height.current+'%'}} key={id} ></button>)
+        style={{height: height+'%'}} key={id} ></button>)
 }
 
 export function ArrayComponent({ algorithm='', arrayLen = 50, maxValue = 50, minValue = 0 }) {
