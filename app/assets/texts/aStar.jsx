@@ -4,8 +4,8 @@ export const description = {
     title: "A* Algorithm",
     type: "GraphFrame",
     complexity: {
-        time: <>O(b)<sup>"d"</sup></>,
-        space: <>O(b)<sup>"d"</sup></>,
+        time: <>O(b)<sup>d</sup></>,
+        space: <>O(b)<sup>d</sup></>,
     },
     dataTypes: ["Graphs"],
     definition:(<>

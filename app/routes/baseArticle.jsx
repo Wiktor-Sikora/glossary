@@ -5,6 +5,12 @@ import { Link } from "react-router";
 import { ArrayComponent } from '../components/arrayComponents.jsx';
 import GraphFrame from '../components/graphFrame.jsx';
 
+import { CiPlay1 } from "react-icons/ci";
+import { RiResetLeftFill } from "react-icons/ri";
+import { IoIosAddCircleOutline} from "react-icons/io";
+import { IoRemoveCircleOutline } from "react-icons/io5";
+
+
 export function meta() {
     return [
         { title: "Algorithm Glossary | Binary Search" },
@@ -31,11 +37,64 @@ export function ArticleHeader({ title, timeComplexity, spaceComplexity, dataType
     </div>)
 }
 
-export function Visualization({ type, algorithm }){
+export function Visualization({ type, algorithm, }){
+    const [graphControls, setGraphControls] = useState(null);
+
     return(<div className="flex flex-col gap-y-3">
         <h3 className="text-3xl font-bold text-rosepink my-auto">Visualization</h3>
-        <div className={`flex flex-row ${type==="ArrayFrame" ? "h-72" : "h-102"} border-blue-magenta border-2 rounded-xl !p-6 shadow-lg`}>
-            {type === "ArrayFrame" ? <ArrayComponent /> : <GraphFrame algorithm={algorithm}/>}
+        <div className={`flex flex-row gap-3 ${type==="ArrayFrame" ? "h-72" : "h-102"}`}>
+            <div className="relative flex flex-col gap-1 w-full border-blue-magenta border-2 rounded-xl p-3">
+                {type === "ArrayFrame" ? <ArrayComponent /> :
+                <>
+                    <GraphFrame algorithm={algorithm} onControlsReady={setGraphControls}/>
+                     <div className="absolute bottom-3 left-3 text-xs text-gray-300">
+                       Click any two vertices to connect them<br/>
+                       Shift+click on the node to set it as "start"
+                       {algorithm === "A* Algorithm" && (
+                          <>
+                            <br/>Ctrl+click on the node to set it as "end"
+                          </>
+                        )}
+                       {(algorithm === "A* Algorithm" || algorithm === "Dijkstra's Algorithm") && (
+                          <>
+                            <br/>Shift+click on edge to increase weight
+                            <br/>Ctrl+click on edge to decrease weight
+                          </>
+                        )}
+                     </div>
+                </> 
+                }
+            </div>
+            <div className="flex flex-col gap-3 border-blue-magenta border-2 rounded-xl p-3">
+                {graphControls && (
+                    <>
+                      <button
+                        onClick={graphControls.runAlgorithm}
+                        className="text-rosepink hover:scale-110 duration-200"
+                      >
+                        <CiPlay1 className="m-auto size-14"/>
+                      </button>
+                      <button
+                        onClick={graphControls.resetGraph}
+                        className="text-rosepink hover:scale-110 duration-200"
+                      >
+                        <RiResetLeftFill className="m-auto size-13"/>
+                      </button>
+                      <button
+                        onClick={graphControls.addNode}
+                        className="text-rosepink hover:scale-110 duration-200"
+                      >
+                        <IoIosAddCircleOutline className="m-auto size-14"/>
+                      </button>
+                      <button
+                        onClick={graphControls.removeLastNode}
+                        className="text-rosepink hover:scale-110 duration-200"
+                      >
+                        <IoRemoveCircleOutline className="m-auto size-14"/>
+                      </button>
+                    </>
+                  )}
+            </div>
         </div>
     </div>);
 }
