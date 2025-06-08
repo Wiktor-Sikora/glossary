@@ -33,7 +33,7 @@ export function Layout({ children }) {
         <Meta />
         <Links />
       </head>
-      <body className="bg-navy-blue-magenta text-white">
+      <body className="subpixel-antialiased bg-navy-blue-magenta text-white">
         {children}
         <ScrollRestoration />
         <Scripts />

@@ -120,13 +120,13 @@ function ArrayFrame({ arrayLen = 50, maxValue = 50, minValue = 0 }) {
         </div>
         <div className="grid grid-cols-2 gap-3 border-blue-magenta place-items-center border-2 rounded-xl p-3">
             <SquareButton onButtonClick={() => handleRandomize(arrayLength)} alt={"Randomize Array"}>
-                <IconContext.Provider value={{size: "3rem" }}><CgDice5 /></IconContext.Provider>
+                <IconContext.Provider value={{size: "3rem"}}><CgDice5 /></IconContext.Provider>
             </SquareButton>
             <SquareButton alt={"Shuffle Array"}>
-                <IconContext.Provider value={{size: "3rem" }}><TbArrowsShuffle /></IconContext.Provider>
+                <IconContext.Provider value={{size: "3rem"}}><TbArrowsShuffle /></IconContext.Provider>
             </SquareButton>
             <RangeInput description={"Delay:"} initialValue={delay} minValue={1} maxValue={1000} onChange={(e) => setDelay(Number(e.target.value))} />
-            <RangeInput description={"items:"} initialValue={arrayLength} minValue={10} maxValue={500} onChange={(e) => {handleArrayLengthChange(Number(e.target.value))}} />
+            <RangeInput description={"Items:"} initialValue={arrayLength} minValue={10} maxValue={500} onChange={(e) => {handleArrayLengthChange(Number(e.target.value))}} />
         </div>
     </div>)
 }
