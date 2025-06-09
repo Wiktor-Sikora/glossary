@@ -11,6 +11,8 @@ export function meta() {
 }
 
 async function algorithm(arrayElements, setElements, delay, shouldRunRef, setShouldRunState, setComparisons, setReorders) {
+
+
     setComparisons(0)
     setReorders(0)
     setShouldRunState(true)
@@ -55,7 +57,7 @@ async function algorithm(arrayElements, setElements, delay, shouldRunRef, setSho
 function Visualization({ algorithm, isReordable = true }) {
     return(<div className="flex flex-col gap-y-3">
         <h3 className="text-3xl font-bold text-rosepink my-auto">Visualization</h3>
-        <ArrayFrameSorting algorithm={algorithm} isReordable={true}/>
+        <ArrayFrameSorting algorithm={algorithm} isReordable={isReordable}/>
     </div>);
 }
 
