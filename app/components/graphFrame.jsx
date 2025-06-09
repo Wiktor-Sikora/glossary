@@ -120,7 +120,7 @@ const initialEdges = [
   { id: 'e7-8', source: '7', target: '8', data: { weight: 1 }},
 ];
 
-export default function GraphFrame({ algorithm, onControlsReady }) {
+export default function GraphFrame({ algorithm, onControlsReady, setPathsOutput  }) {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
@@ -266,13 +266,6 @@ export default function GraphFrame({ algorithm, onControlsReady }) {
 
 const runAlgorithm = async () => {
 
-console.log('>>> runAlgorithm', {
-  start: startNodeId,
-  end: endNodeId,
-  edges: edges.map(e => e.data?.weight)
-});
-
-
   if (!startNodeId) {
     alert('Shift+click to set start node');
     return;
@@ -284,7 +277,7 @@ console.log('>>> runAlgorithm', {
 
   isCancelled.current = false;
 
-  // Resetowanie stanu wizualizacji
+  // Resetting the visualization state
   setNodes((nds) =>
     nds.map((node) => ({
       ...node,
@@ -314,55 +307,105 @@ console.log('>>> runAlgorithm', {
     return;
   }
 
-  // Uniwersalny callback dla wszystkich algorytmów
   const handleVisit = async (nodeId, meta = {}) => {
     if (isCancelled.current) return;
 
-    // Aktualizacja węzła
-    setNodes((nds) =>
-      nds.map((node) => {
-        if (node.id !== nodeId) return node;
+    if (nodeId) {
+      setNodes((nds) =>
+        nds.map((node) => {
+          if (node.id !== nodeId) return node;
+
+          if (meta.unused) {
+            console.log(`[RESETTING NODE ${node.id}]`);
+            return {
+              ...node,
+              data: {
+                ...node.data,
+                visited: false,
+                distance: undefined,
+                gScore: undefined,
+                fScore: undefined,
+
+              },
+              style: undefined
+            };
+          }
+
+          return {
+            ...node,
+            data: {
+              ...node.data,
+              visited: true,
+              ...(meta.distance !== undefined && { distance: meta.distance }),
+              ...(meta.gScore !== undefined && { gScore: meta.gScore }),
+              ...(meta.fScore !== undefined && { fScore: meta.fScore }),
+              label:
+                algorithm === 'dijkstra' ? `${nodeId} (${meta.distance})` :
+                algorithm === 'a-star' ? `${nodeId} (${meta.fScore})` :
+                node.data.label
+            },
+            style: node.style
+          };
+        })
+      );
+  }
+
+
+  if (meta.edgeId) {
+    setEdges((eds) =>
+      eds.map((edge) => {
+        if (edge.id !== meta.edgeId) return edge;
         
-        const updated = { 
-          ...node, 
-          data: { 
-            ...node.data, 
-            visited: true,
-            ...(meta.distance !== undefined && { distance: meta.distance }),
-            ...(meta.gScore !== undefined && { gScore: meta.gScore }),
-            ...(meta.fScore !== undefined && { fScore: meta.fScore }),
-            label: algorithm === 'dijkstra' ? `${nodeId} (${meta.distance})` :
-                  algorithm === 'a-star' ? `${nodeId} (${meta.fScore})` : node.data.label
+        // Edge reset
+        if (meta.resetEdge) {
+          return {
+            ...edge,
+            style: { stroke: '#eee', strokeWidth: 2 },
+            ...(algorithm === 'dijkstra' || algorithm === 'a-star') && { 
+              label: `${edge.data.weight}` 
+            }
+          };
+        }
+        
+        // Active/Inactive Edge
+        return {
+          ...edge,
+          style: { 
+            stroke: meta.isActive ? '#e88da3' : '#ffb6c1',
+          },
+          ...(algorithm === 'dijkstra' || algorithm === 'a-star') && { 
+            label: `${edge.data.weight}` 
           }
         };
-        return updated;
       })
     );
+  }
 
-    // Podświetlenie krawędzi
-    if (meta.edgeId) {
-      setEdges((eds) =>
-        eds.map((edge) =>
-          edge.id === meta.edgeId
-            ? { 
-                ...edge, 
-                style: { stroke: '#e88da3', strokeWidth: 3 },
-                ...(algorithm === 'dijkstra' || algorithm === 'a-star') && { 
-                  label: `${edge.data.weight}` 
-                }
-              }
-            : edge
-        )
-      );
-    }
+  await new Promise((r) => setTimeout(r, 500));
+};
 
-    await new Promise((r) => setTimeout(r, 500));
-  };
-
-  // Wywołanie odpowiedniego algorytmu
+  
   if (key === 'a-star') {
     await algorithmFn(startNodeId, endNodeId, edges, nodes, handleVisit);
-  } else {
+  }
+  else if (key === 'dijkstra') {
+    const allPaths = await algorithmFn(startNodeId, edges, handleVisit);
+    const idToLabel = Object.fromEntries(nodes.map(n => [n.id, n.data.label]));
+    const labeledPaths = {};
+    Object.entries(allPaths).forEach(([nodeId, paths]) => {
+      labeledPaths[idToLabel[nodeId]] = paths.map(path =>
+        path.map(id => idToLabel[id])
+      );
+    });
+    const formatted = Object.entries(labeledPaths)
+      .map(([label, paths]) =>
+        `${label}: ${paths.map(p => p.join(' → ')).join('; ')}`
+      )
+      .join('\n');
+
+    setPathsOutput(formatted);
+  }
+  else {
     await algorithmFn(startNodeId, edges, handleVisit);
   }
 };
@@ -384,6 +427,7 @@ console.log('>>> runAlgorithm', {
     );
     setStartNodeId(null);
     setEndNodeId(null);
+    setPathsOutput("");
   };
 
   useEffect(() => {
@@ -398,17 +442,19 @@ console.log('>>> runAlgorithm', {
   }, [edges, nodes, startNodeId, endNodeId]);
 
   return (
-    <div className="w-full h-102 rounded-lg">
+    <div className="w-full h-102 rounded-lg select-none">
       <ReactFlow
         style={{ width: '100%', height: '600px' }}
         nodes={nodes}
         edges={edges}
         edgeTypes={edgeTypes}
+        setPathsOutput={setPathsOutput}
         connectionLineComponent={FloatingConnectionLine}
         onEdgeClick={onEdgeClick}
         nodeTypes={nodeTypes}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
+        multiSelectionKeyCode={null}
         onConnect={onConnect}
         connectionMode="loose"
         connectionRadius={50}

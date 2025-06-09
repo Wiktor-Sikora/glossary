@@ -39,6 +39,7 @@ export function ArticleHeader({ title, timeComplexity, spaceComplexity, dataType
 
 export function Visualization({ type, algorithm, }){
     const [graphControls, setGraphControls] = useState(null);
+    const [pathsOutput, setPathsOutput] = useState("");
 
     return(<div className="flex flex-col gap-y-3">
         <h3 className="text-3xl font-bold text-rosepink my-auto">Visualization</h3>
@@ -46,7 +47,7 @@ export function Visualization({ type, algorithm, }){
             <div className="relative flex flex-col gap-1 w-full border-blue-magenta border-2 rounded-xl p-3">
                 {type === "ArrayFrame" ? <ArrayComponent /> :
                 <>
-                    <GraphFrame algorithm={algorithm} onControlsReady={setGraphControls}/>
+                    <GraphFrame algorithm={algorithm} onControlsReady={setGraphControls} setPathsOutput={setPathsOutput}/>
                      <div className="absolute bottom-3 left-3 text-xs text-gray-300">
                        Click any two vertices to connect them<br/>
                        Shift+click on the node to set it as "start"
@@ -96,6 +97,12 @@ export function Visualization({ type, algorithm, }){
                   )}
             </div>
         </div>
+         {pathsOutput && (
+        <div className="whitespace-pre-wrap border-2 border-rosepink text-white rounded-xl p-3 bg-gray-900">
+          <h4 className="text-lg font-semibold mb-2 text-rosepink">Path results:</h4>
+          <div>{pathsOutput}</div>
+        </div>
+      )}
     </div>);
 }
 
