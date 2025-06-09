@@ -12,8 +12,6 @@ import algorithms from '../assets/visualizations/graphs/graphAlgorithms';
 import FloatingEdge from './FloatingEdge';
 import FloatingConnectionLine from './FloatingConnectionLine';
 
-const edgeTypes = { floating: FloatingEdge };
-
 
 import 'reactflow/dist/style.css';
 
@@ -132,6 +130,11 @@ export default function GraphFrame({ algorithm, onControlsReady }) {
   const isCancelled = useRef(false);
 
   const algorithmMap = { "BFS": "bfs", "DFS": "dfs", "Dijkstra's Algorithm": "dijkstra", "A* Algorithm": "a-star" };
+
+
+  const edgeTypes = {
+  floating: (props) => <FloatingEdge {...props} algorithmKey={algorithm} />,
+};
 
   const addNode = () => {
     const newId = String(counter++);

@@ -54,7 +54,7 @@ export default function FloatingEdge({ id, source, target, data = {}, style = {}
       />
       <polygon points={points} fill={strokeColor} />
 
-      {algorithmKey === "a-star" ? (
+      {algorithmKey === "A* Algorithm" || algorithmKey === "Dijkstra's Algorithm"? (
           <text
             x={midX}
             y={midY - 10}

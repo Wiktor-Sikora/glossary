@@ -52,41 +52,91 @@ const algorithms = {
 
   // Dijkstra
 dijkstra: async (startNodeId, edges, onVisit) => {
+  // 1. Budowa listy sąsiedztwa
   const adjacencyList = {};
   edges.forEach(({ id, source, target, data }) => {
     if (!adjacencyList[source]) adjacencyList[source] = [];
-    adjacencyList[source].push({ target, edgeId: id, weight: data?.weight ?? 1 });
+    adjacencyList[source].push({
+      target,
+      edgeId: id,
+      weight: data?.weight ?? 1
+    });
   });
 
+  // 2. Inicjalizacja dystansów i kolejki priorytetowej
   const distances = {};
   const priorityQueue = new PriorityQueue((a, b) => a.distance - b.distance);
 
+  // Węzły z krawędzi wychodzących
   Object.keys(adjacencyList).forEach(nodeId => {
     distances[nodeId] = nodeId === startNodeId ? 0 : Infinity;
   });
-
-  // Dodaj też węzły, które nie mają krawędzi wychodzących
-  edges.forEach(({ source, target }) => {
+  // Dodaj węzły bez krawędzi wychodzących
+  edges.forEach(({ target }) => {
     if (!(target in distances)) distances[target] = Infinity;
   });
 
+  // 3. Mapa poprzedników: dla każdego węzła lista { prevNode, viaEdge }
+  const cameFrom = {};
+  Object.keys(distances).forEach(nodeId => {
+    cameFrom[nodeId] = [];
+  });
+
+  // Start w kolejce
   priorityQueue.enqueue({ nodeId: startNodeId, distance: 0, edgeId: null });
 
+  // 4. Główna pętla Dijkstry
   while (!priorityQueue.isEmpty()) {
     const { nodeId, distance, edgeId } = priorityQueue.dequeue();
     if (distance > distances[nodeId]) continue;
 
+    // callback wizualizacji
     await onVisit(nodeId, { distance, edgeId });
 
-    for (const { target, edgeId, weight } of adjacencyList[nodeId] || []) {
+    for (const { target, edgeId: eId, weight } of adjacencyList[nodeId] || []) {
       const newDistance = distance + weight;
+
       if (newDistance < distances[target]) {
+        // lepszy dystans → reset poprzedników
         distances[target] = newDistance;
-        priorityQueue.enqueue({ nodeId: target, distance: newDistance, edgeId });
+        cameFrom[target] = [{ prevNode: nodeId, viaEdge: eId }];
+        priorityQueue.enqueue({ nodeId: target, distance: newDistance, edgeId: eId });
+
+      } else if (newDistance === distances[target]) {
+        // równy dystans → dopisz kolejnego poprzednika
+        cameFrom[target].push({ prevNode: nodeId, viaEdge: eId });
       }
     }
   }
+
+  // 5. Rekonstrukcja wszystkich ścieżek
+  function buildPaths(node) {
+    if (node === startNodeId) {
+      return [[ startNodeId ]];
+    }
+    const paths = [];
+    for (const { prevNode } of cameFrom[node]) {
+      const subPaths = buildPaths(prevNode);
+      for (const sp of subPaths) {
+        paths.push([ ...sp, node ]);
+      }
+    }
+    return paths;
+  }
+
+  // 6. Zbiór wszystkich ścieżek do każdego węzła
+  const allPaths = {};
+  Object.keys(distances).forEach(nodeId => {
+    if (distances[nodeId] < Infinity) {
+      allPaths[nodeId] = buildPaths(nodeId);
+    } else {
+      allPaths[nodeId] = []; // nieosiągalne
+    }
+  });
+
+  return allPaths;
 },
+
 
 
   // A*
@@ -116,7 +166,10 @@ dijkstra: async (startNodeId, edges, onVisit) => {
     const node2 = nodes.find(n => n.id === endNodeId);
     if (!node1 || !node2) return Infinity;
 
-    const dist = Math.hypot(node1.position.x - node2.position.x, node1.position.y - node2.position.y);
+    const dist = Math.hypot(
+      node1.position.x - node2.position.x,
+      node1.position.y - node2.position.y
+    );
     return (dist / maxDistance) * maxWeight;
   };
 
@@ -138,6 +191,7 @@ dijkstra: async (startNodeId, edges, onVisit) => {
 
   const openSet = new PriorityQueue((a, b) => a.fScore - b.fScore);
   const gScores = {};
+  const cameFromEdge = {}; // przechowuje edgeId prowadzące do danego węzła
   const closedSet = new Set();
 
   gScores[startNodeId] = 0;
@@ -154,7 +208,6 @@ dijkstra: async (startNodeId, edges, onVisit) => {
     const { nodeId, gScore, edgeId } = openSet.dequeue();
 
     if (closedSet.has(nodeId)) continue;
-
     closedSet.add(nodeId);
 
     await onVisit(nodeId, { 
@@ -173,8 +226,19 @@ dijkstra: async (startNodeId, edges, onVisit) => {
       const currentGScore = gScores[target] ?? Infinity;
 
       if (tentativeGScore < currentGScore) {
+        // Cofnij poprzednią krawędź jeśli istniała
+        if (cameFromEdge[target]) {
+          await onVisit(target, {
+            gScore: Infinity,
+            fScore: Infinity,
+            edgeId: cameFromEdge[target],
+            replacing: true // ← kluczowa zmiana
+          });
+        }
+
         gScores[target] = tentativeGScore;
         const fScore = tentativeGScore + heuristic(target);
+        cameFromEdge[target] = eId;
 
         openSet.enqueue({
           nodeId: target,
@@ -186,6 +250,8 @@ dijkstra: async (startNodeId, edges, onVisit) => {
     }
   }
 }
+
+
 };
 
 class PriorityQueue {
