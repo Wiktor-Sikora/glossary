@@ -2,7 +2,7 @@ import CodeSnippet from "../../components/codeSnippet.jsx";
 
 export const description = {
     title: "",
-    type: "ArrayFrame",
+    type: "ArrayFrameSorting",
     complexity: {
         time: "O(n)",
         space: "O(n)",

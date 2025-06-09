@@ -2,21 +2,30 @@ import { useState } from 'react';
 import { CodeBlock } from 'react-code-block';
 import { themes } from 'prism-react-renderer';
 import { Link } from "react-router";
-import { ArrayComponent } from '../components/arrayComponents.jsx';
 import GraphFrame from '../components/graphFrame.jsx';
+import { IoArrowBack } from "react-icons/io5";
+import {IconContext} from "react-icons";
 
 export function meta() {
     return [
-        { title: "Algorithm Glossary | Binary Search" },
-        { name: "description", content: "A collection of various algorithms | Binary Search article" },
+        { title: "Algorithm Glossary | Article" },
+        { name: "description", content: "A collection of various algorithms | Article" },
     ];
 }
 
-export function Return(){
+export function Return() {
+    const [wasClicked, setWasClicked] = useState(false);
+
     return(
-        <div className="relative">
-            <Link to="/" className="fixed top-10 left-15 border-2 border-blue-magenta px-2 text-2xl pb-1 rounded-xl font-semibold">{`<`}</Link>
-        </div>
+        <button className="relative" onClick={() => setWasClicked(true)}>
+            <Link to="/" className={`fixed top-10 border-2 border-blue-magenta p-2 text-2xl rounded-full font-semibold hover:scale-110 ${wasClicked ? '-left-3 duration-50' : 'left-15 duration-100'}`}
+
+            >
+                <IconContext.Provider value={{className: "stroke-1 my-auto" }}>
+                    <IoArrowBack  />
+                </IconContext.Provider>
+            </Link>
+        </button>
     )
 }
 
@@ -34,8 +43,8 @@ export function ArticleHeader({ title, timeComplexity, spaceComplexity, dataType
 export function Visualization({ type, algorithm }){
     return(<div className="flex flex-col gap-y-3">
         <h3 className="text-3xl font-bold text-rosepink my-auto">Visualization</h3>
-        <div className={`flex flex-row ${type==="ArrayFrame" ? "h-72" : "h-102"} border-blue-magenta border-2 rounded-xl !p-6 shadow-lg`}>
-            {type === "ArrayFrame" ? <ArrayComponent /> : <GraphFrame algorithm={algorithm}/>}
+        <div className={`flex flex-row ${type==="ArrayFrameSorting" ? "h-72" : "h-102"} border-blue-magenta border-2 rounded-xl !p-6 shadow-lg`}>
+            {type === "ArrayFrameSorting" ? <ArrayComponent /> : <GraphFrame algorithm={algorithm}/>}
         </div>
     </div>);
 }

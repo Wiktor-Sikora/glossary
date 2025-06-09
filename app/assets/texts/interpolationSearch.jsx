@@ -2,7 +2,7 @@ import CodeSnippet from "../../components/codeSnippet.jsx";
 
 export const description = {
     title: "Interpolation Search",
-    type: "ArrayFrame",
+    type: "ArrayFrameSorting",
     complexity: {
         time: "O(log log n)",
         space: "O(1)",

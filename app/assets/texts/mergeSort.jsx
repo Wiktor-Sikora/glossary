@@ -2,7 +2,7 @@ import CodeSnippet from "../../components/codeSnippet.jsx";
 
 export const description = {
     title: "Merge Sort",
-    type: "ArrayFrame",
+    type: "ArrayFrameSorting",
     complexity: {
         time: "O(n log n)",
         space: "O(n)",

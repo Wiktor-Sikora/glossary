@@ -1,7 +1,7 @@
 import {useState, useRef} from 'react';
 import {Article, ArticleHeader, CodeBlockSection} from "../../baseArticle.jsx";
 import description from "../../../assets/texts/binarySearch.jsx";
-import {Element, SquareButton, RangeInput} from "../../../components/arrayComponents.jsx";
+import {Element, SquareButton, RangeInput} from "../../../components/arrayFrameSorting.jsx";
 import {generateRandomArray, changeStateArea} from "../../../datatypes/array.js";
 import {useImmer} from "use-immer";
 import { IconContext } from "react-icons";
