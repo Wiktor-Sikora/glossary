@@ -1,4 +1,4 @@
-import {Article, ArticleHeader, CodeBlockSection} from "../../baseArticle.jsx";
+import {Article, ArticleHeader, CodeBlockSection, Return} from "../../baseArticle.jsx";
 import {ArrayFrameSorting} from "../../../components/arrayFrameSorting.jsx";
 import description from "../../../assets/texts/bubbleSort.jsx";
 // import {playDynamicTone} from "../../../utils/sound.js"
@@ -11,8 +11,6 @@ export function meta() {
 }
 
 async function algorithm(arrayElements, setElements, delay, shouldRunRef, setShouldRunState, setComparisons, setReorders) {
-
-
     setComparisons(0)
     setReorders(0)
     setShouldRunState(true)
@@ -61,10 +59,11 @@ function Visualization({ algorithm, isReordable = true }) {
 }
 
 export default function BubbleSort() {
-    return (<section className="w-[80%] mx-auto flex flex-col gap-y-10 md:scale-90 text-lg">
+    return (<><Return />
+    <section className="w-[80%] mx-auto flex flex-col gap-y-10 md:scale-90 text-lg">
         <ArticleHeader title={description.title} timeComplexity={description.complexity.time} spaceComplexity={description.complexity.space} dataType={description.dataTypes} />
         <Visualization algorithm={algorithm}/>
         <Article definition={description.definition} constraints={description.constraints} algorithmArguments={description.arguments} explanation={description.explanation} returns={description.returns} />
         <CodeBlockSection languages={description.languages} />
-    </section>);
+    </section></>);
 }

@@ -3,8 +3,6 @@ import { index, route } from "@react-router/dev/routes";
 export default [
     index("routes/home.jsx"),
     route("binary-search", "routes/lists/searching/binarySearch.jsx"),
-    route("jump-search", "routes/lists/searching/jumpSearch.jsx"),
-    route("interpolation-search", "routes/lists/searching/interpolationSearch.jsx"),
     route("quick-sort", "routes/lists/sorting/quickSort.jsx"),
     route("merge-sort", "routes/lists/sorting/mergeSort.jsx"),
     route("heap-sort", "routes/lists/sorting/heapSort.jsx"),
