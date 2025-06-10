@@ -45,13 +45,13 @@ function Tile({ path, img, gif, imgAlt, title, purpose, complexity}) {
       <p className="text-xl text-rosepink font-mono font-bold
       max-sm:text-lg">{title}</p>
       <div className="flex flex-row justify-between w-full">
-          <div className="flex flex-col self-start">
+          <div className="flex flex-col self-start ">
               <p className="text-lg text-left text-dark-rosepink font-mono font-bold
               max-sm:text-sm">{purpose}</p>
           </div>
-          <div className="flex flex-col self-end">
-              <p className="text-xl text-right text-dark-rosepink font-mono font-bold
-              max-sm:text-lg">{complexity}</p>
+          <div className="flex flex-col my-auto self-end items-center">
+              <p className="text-lg my-auto text-right text-dark-rosepink font-mono font-bold
+              max-sm:text-sm">{complexity}</p>
           </div>
       </div>
     </Link>
@@ -60,7 +60,7 @@ function Tile({ path, img, gif, imgAlt, title, purpose, complexity}) {
 
 function Tiles() {
   return(
-    <div className="w-[80%] mt-5 mx-auto grid gap-y-10
+    <div className="w-[80%] mt-5 mx-auto grid gap-y-10 mb-20
     2xl:grid-cols-4
     md:grid-cols-3
     max-md:grid-cols-2
