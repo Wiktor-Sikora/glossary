@@ -30,7 +30,6 @@ async function algorithm(arrayElements, setElements, delay, shouldRunRef, setSho
             if (localArray[j].value > localArray[j + 1].value) {
 
                 [localArray[j], localArray[j + 1]] = [localArray[j + 1], localArray[j]];
-                // playDynamicTone(localArray[j].value, maxValue, 0.5, 0.5)
 
                 swapped = true;
                 setElements(() => [...localArray]);

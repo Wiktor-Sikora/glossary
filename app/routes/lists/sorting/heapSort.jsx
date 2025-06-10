@@ -1,7 +1,6 @@
 import {Article, ArticleHeader, CodeBlockSection} from "../../baseArticle.jsx";
 import {ArrayFrameSorting} from "../../../components/arrayFrameSorting.jsx";
 import description from "../../../assets/texts/heapSort.jsx";
-// import {playDynamicTone} from "../../../utils/sound.js"
 
 export function meta() {
     return [
@@ -10,55 +9,12 @@ export function meta() {
     ];
 }
 
-// async function algorithm(arrayElements, setElements, delay, shouldRunRef, setShouldRunState, setComparisons, setReorders) {
-//     setComparisons(0)
-//     setReorders(0)
-//     setShouldRunState(true)
-//     shouldRunRef.current = true
-//
-//     let localArray = [...arrayElements];
-//
-//     for (let i = 0; i < localArray.length - 1 && shouldRunRef.current; i++) {
-//         setComparisons(n => n + 1)
-//         let swapped = false;
-//
-//         for (let j = 0; j < localArray.length - i - 1 && shouldRunRef.current; j++) {
-//             setComparisons(n => n + 1)
-//
-//             if (localArray[j].value > localArray[j + 1].value) {
-//
-//                 [localArray[j], localArray[j + 1]] = [localArray[j + 1], localArray[j]];
-//                 // playDynamicTone(localArray[j].value, maxValue, 0.5, 0.5)
-//
-//                 swapped = true;
-//                 setElements(() => [...localArray]);
-//                 setReorders(n => n + 1)
-//
-//                 if (shouldRunRef.current) {
-//                     await new Promise((r) => setTimeout(r, delay))
-//                 } else {
-//                     return
-//                 }
-//             }
-//         }
-//
-//         setComparisons(n => n + 1)
-//         if (!swapped) {
-//             break;
-//         }
-//     }
-//
-//     setShouldRunState(false)
-//     shouldRunRef.current = false
-// }
-
 async function algorithm(arrayElements, setElements, delay, shouldRunRef, setShouldRunState, setComparisons, setReorders)  {
     function heapify(array, index, length = array.length) {
         let largest = index
         let left = index * 2 + 1
         let right = index * 2 + 2
 
-        // compare element to it's left and right child
         if (left < length && array[left].value > array[largest].value) {
             largest = left;
         }
@@ -67,20 +23,16 @@ async function algorithm(arrayElements, setElements, delay, shouldRunRef, setSho
         }
 
 
-        // if the parent node isn't the largest element, swap it with the largest child
         if (largest !== index) {
             [array[index], array[largest]] = [array[largest], array[index]];
 
             setReorders(n => n + 1)
             setElements(() => [...array])
 
-            // continue to heapify down
             heapify(array, largest, length);
         }
 
         setComparisons(n => n + 3)
-
-        // return array;
     }
 
     setComparisons(0)
@@ -99,19 +51,25 @@ async function algorithm(arrayElements, setElements, delay, shouldRunRef, setSho
             return
         }
 
-        heapify(localArray, i);
+        await heapify(localArray, i);
         setElements(() => [...localArray])
     }
 
     for (let i = localArray.length - 1; i > 0; i--) {
-        setComparisons(n => n + 1)
+        setComparisons(n => n + 1);
 
-        [localArray[0], localArray[i]] = [localArray[i], localArray[0]];
+        [localArray[0], localArray[i]] = [localArray[i], localArray[0]]
+
+        if (shouldRunRef.current) {
+            await new Promise((r) => setTimeout(r, delay))
+        } else {
+            return
+        }
 
         setElements(() => [...localArray])
         setReorders(n => n + 1)
 
-        heapify(localArray, 0, i);
+        await heapify(localArray, 0, i)
     }
 
     setShouldRunState(false)
