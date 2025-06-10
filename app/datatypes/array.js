@@ -34,7 +34,7 @@ export function reorder(array) {
         let randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex--;
 
-        [this.array[currentIndex], this.array[randomIndex]] = [this.array[randomIndex], this.array[currentIndex]];
+        [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
     }
 
     return array

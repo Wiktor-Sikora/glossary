@@ -2,7 +2,7 @@ import CodeSnippet from "../../components/codeSnippet.jsx";
 
 export const description = {
     title: "Bubble Sort",
-    type: "ArrayFrame",
+    type: "ArrayFrameSorting",
     complexity: {
         time: "O(n²)",
         space: "O(1)",
