@@ -1,3 +1,12 @@
+function isPrefix(shorter, longer) {
+  if (shorter.length > longer.length) return false;
+  for (let i = 0; i < shorter.length; i++) {
+    if (shorter[i] !== longer[i]) return false;
+  }
+  return true;
+}
+
+
 const algorithms = {
 
     //DFS
@@ -134,151 +143,148 @@ const algorithms = {
   
   
   
-  // A*
-  'a-star': async (startNodeId, endNodeId, edges, nodes, onVisit) => {
-    const calculateMaxDistance = () => {
-      let maxDist = 0;
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-          const dx = nodes[i].position.x - nodes[j].position.x;
-          const dy = nodes[i].position.y - nodes[j].position.y;
-          const dist = Math.hypot(dx, dy);
-          if (dist > maxDist) maxDist = dist;
+ // A*
+'a-star': async (startNodeId, endNodeId, edges, nodes, onVisit) => {
+  console.log('Start A*:', startNodeId, '->', endNodeId);
+
+  const adjacencyList = {};
+  edges.forEach(({ id, source, target, data }) => {
+    const weight = data?.weight ?? 1;
+    console.log(`Edge ${id} from ${source} to ${target} has weight: ${weight}`);
+    if (!adjacencyList[source]) adjacencyList[source] = [];
+    adjacencyList[source].push({ target, edgeId: id, weight });
+  });
+
+  // Simple heuristic - returns 0, which turns A* into Dijkstra (guarantees finding the optimal path)
+  const heuristic = () => 0;
+
+  class PriorityQueue {
+    constructor(compare) {
+      this.elements = [];
+      this.compare = compare;
+    }
+    enqueue(element) {
+      this.elements.push(element);
+      this.elements.sort(this.compare);
+    }
+    dequeue() {
+      return this.elements.shift();
+    }
+    isEmpty() {
+      return this.elements.length === 0;
+    }
+  }
+
+  const openSet = new PriorityQueue((x, y) => x.fScore - y.fScore);
+  const gScore = { [startNodeId]: 0 };
+  const fScore = { [startNodeId]: heuristic(startNodeId) };
+  const cameFrom = {};
+  const closedSet = new Set();
+
+  // Helper function to play a track
+  const reconstruct = node => {
+    const path = [node];
+    while (cameFrom[node]) {
+      node = cameFrom[node];
+      path.unshift(node);
+    }
+    return path;
+  };
+
+  openSet.enqueue({ nodeId: startNodeId, fScore: fScore[startNodeId] });
+
+  const visitedPaths = [];
+  const pathKey = path => JSON.stringify(path);
+  const seenPaths = new Set();
+
+  const statusPriority = { ok: 0, discarded: 1, final: 2 };
+
+  function addOrUpdateVisitedPath(path, status) {
+    const key = pathKey(path);
+    if (!seenPaths.has(key)) {
+      visitedPaths.push({ path, status });
+      seenPaths.add(key);
+    } else {
+      for (let vp of visitedPaths) {
+        if (pathKey(vp.path) === key && statusPriority[status] > statusPriority[vp.status]) {
+          vp.status = status;
+          break;
         }
-      }
-      return maxDist;
-    };
-  
-    const maxDistance = calculateMaxDistance();
-  
-    const maxWeight = edges.reduce((maxW, e) => {
-      const w = e.data?.weight ?? 1;
-      return w > maxW ? w : maxW;
-    }, 1);
-  
-    const heuristic = (nodeId) => {
-      const node1 = nodes.find(n => n.id === nodeId);
-      const node2 = nodes.find(n => n.id === endNodeId);
-      if (!node1 || !node2) return Infinity;
-    
-      const dist = Math.hypot(
-        node1.position.x - node2.position.x,
-        node1.position.y - node2.position.y
-      );
-      return (dist / maxDistance) * maxWeight;
-    };
-  
-    const buildAdjacencyList = () => {
-      const list = {};
-      edges.forEach(({ id, source, target, data }) => {
-        const weight = data?.weight ?? 1;
-      
-        if (!list[source]) list[source] = [];
-        list[source].push({ target, edgeId: id, weight });
-      
-        if (!list[target]) list[target] = [];
-        list[target].push({ target: source, edgeId: id, weight });
-      });
-      return list;
-    };
-  
-    const adjacencyList = buildAdjacencyList();
-  
-    const openSet = new PriorityQueue((a, b) => a.fScore - b.fScore);
-    const gScores = {};
-    const cameFrom = {}; 
-    const closedSet = new Set();
-    const edgeHistory = new Set(); // Keeps track of all edges used
-  
-    gScores[startNodeId] = 0;
-    const startFScore = heuristic(startNodeId);
-  
-    openSet.enqueue({
-      nodeId: startNodeId,
-      gScore: 0,
-      fScore: startFScore,
-      edgeId: null
-    });
-  
-    while (!openSet.isEmpty()) {
-      const { nodeId, gScore, edgeId } = openSet.dequeue();
-    
-      if (closedSet.has(nodeId)) continue;
-      closedSet.add(nodeId);
-    
-      // Mark previous edge as active
-      if (edgeId) {
-        edgeHistory.add(edgeId);
-        await onVisit(nodeId, { 
-          gScore, 
-          fScore: gScore + heuristic(nodeId),
-          edgeId,
-          isActive: true
-        });
-      }
-    
-      if (nodeId === endNodeId) break;
-    
-      const neighbors = adjacencyList[nodeId] || [];
-      for (const { target, edgeId: eId, weight } of neighbors) {
-        if (closedSet.has(target)) continue;
-      
-        const tentativeGScore = gScores[nodeId] + weight;
-        const currentGScore = gScores[target] ?? Infinity;
-      
-        if (tentativeGScore < currentGScore) {
-          // f there is a previous edge to this malicious one, marked as inactive
-          if (cameFrom[target]) {
-            edgeHistory.add(cameFrom[target].edgeId);
-            await onVisit(target, {
-              gScore: gScores[target] || Infinity,
-              fScore: (gScores[target] || Infinity) + heuristic(target),
-              edgeId: cameFrom[target].edgeId,
-              isActive: false
-            });
-          }
-        
-          gScores[target] = tentativeGScore;
-          const fScore = tentativeGScore + heuristic(target);
-          cameFrom[target] = { nodeId, edgeId: eId };
-        
-          openSet.enqueue({
-            nodeId: target,
-            gScore: tentativeGScore,
-            fScore,
-            edgeId: eId
-          });
-        }
-      }
-    }
-  
-    const finalPathEdges = new Set();
-    const finalPathNodes = new Set();
-  
-    let nodeOnPath = endNodeId;
-    finalPathNodes.add(nodeOnPath);
-  
-    while (cameFrom[nodeOnPath]) {
-      finalPathEdges.add(cameFrom[nodeOnPath].edgeId);
-      nodeOnPath = cameFrom[nodeOnPath].nodeId;
-      finalPathNodes.add(nodeOnPath);
-    }
-  
-    for (const edgeId of edgeHistory) {
-      if (!finalPathEdges.has(edgeId)) {
-        await onVisit(null, {
-          edgeId,
-          resetEdge: true
-        });
-      }
-    }
-  
-    for (const node of nodes) {
-      if (closedSet.has(node.id) && !finalPathNodes.has(node.id)) {
-        await onVisit(node.id, { unused: true });
       }
     }
   }
+
+  while (!openSet.isEmpty()) {
+    const { nodeId: current } = openSet.dequeue();
+    console.log('Processing node:', current, 'gScore:', gScore[current]);
+
+    if (current === endNodeId) {
+    console.log('FOUND END NODE:', current);
+    const finalPath = reconstruct(current);
+    
+    // First we process all tracks except the final one
+    const nonFinalPaths = visitedPaths.filter(p => p.path.join('->') !== finalPath.join('->'));
+    
+    // Mark non-optimal paths as discarded
+    nonFinalPaths.forEach(p => {
+      if (p.status === 'ok' && !isPrefix(p.path, finalPath)) {
+        p.status = 'discarded';
+      }
+    });
+
+    // Add final path at the end
+    const result = [...nonFinalPaths, { path: finalPath, status: 'final' }];
+    
+    for (const nodeId of finalPath) {
+      await onVisit(nodeId, { isActive: true });
+    }
+
+    console.log('visitedPaths zwrócone z a-star:');
+    result.forEach(p => {
+      console.log(`Status: ${p.status}, Path: ${p.path.join('->')}`);
+    });
+
+    return result;
+  }
+
+    if (closedSet.has(current)) continue;
+    closedSet.add(current);
+
+    const basePath = reconstruct(current);
+
+    for (const { target, edgeId, weight } of adjacencyList[current] || []) {
+      if (closedSet.has(target)) continue;
+
+      const tentativeG = gScore[current] + weight;
+      console.log(`Checking ${current}->${target}, weight: ${weight}, tentativeG: ${tentativeG}, current gScore: ${gScore[target] ?? 'Infinity'}`);
+
+      if (tentativeG < (gScore[target] ?? Infinity)) {
+        cameFrom[target] = current;
+        gScore[target] = tentativeG;
+        fScore[target] = tentativeG + heuristic(target);
+        openSet.enqueue({ nodeId: target, fScore: fScore[target] });
+
+        const newPath = basePath.concat(target);
+        addOrUpdateVisitedPath(newPath, 'ok');
+
+        await onVisit(target, {
+          gScore: gScore[target],
+          fScore: fScore[target],
+          edgeId,
+          isActive: true
+        });
+      } else {
+        const rejectedPath = basePath.concat(target);
+        addOrUpdateVisitedPath(rejectedPath, 'discarded');
+        await onVisit(target, { edgeId, isActive: false, isDiscarded: true });
+      }
+    }
+  }
+
+  console.log('No path found');
+  return visitedPaths;
+}
+
   
   
   };

@@ -265,6 +265,7 @@ export default function GraphFrame({ algorithm, onControlsReady, setPathsOutput 
   };
 
 const runAlgorithm = async () => {
+  setPathsOutput("");
 
   if (!startNodeId) {
     alert('Shift+click to set start node');
@@ -386,7 +387,25 @@ const runAlgorithm = async () => {
 
   
   if (key === 'a-star') {
-    await algorithmFn(startNodeId, endNodeId, edges, nodes, handleVisit);
+    const visitedPaths = await algorithmFn(startNodeId, endNodeId, edges, nodes, handleVisit);
+
+    console.log('visitedPaths zwrócone z a-star:');
+    visitedPaths.forEach(({ path, status }) => {
+    console.log(`Status: ${status}, Path: ${path.join('->')}`);
+  });
+
+const idToLabel = Object.fromEntries(nodes.map(n => [n.id, n.data.label]));
+const formatted = visitedPaths
+  .map(({ path, status }) => {
+    const labelPath = path.map(id => idToLabel[id]).join('→');
+    if (status === 'discarded') return `${labelPath} – non-optimal`;
+    if (status === 'final')     return `${labelPath} – end`;
+    return labelPath;
+  })
+  .join('\n');
+
+setPathsOutput(formatted);
+
   }
   else if (key === 'dijkstra') {
     const allPaths = await algorithmFn(startNodeId, edges, handleVisit);
@@ -442,7 +461,7 @@ const runAlgorithm = async () => {
   }, [edges, nodes, startNodeId, endNodeId]);
 
   return (
-    <div className="w-full h-102 rounded-lg select-none">
+    <div className="w-full h-102 rounded-lg lg:select-none">
       <ReactFlow
         style={{ width: '100%', height: '600px' }}
         nodes={nodes}
@@ -455,6 +474,7 @@ const runAlgorithm = async () => {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         multiSelectionKeyCode={null}
+        zoomOnDoubleClick={false}
         onConnect={onConnect}
         connectionMode="loose"
         connectionRadius={50}

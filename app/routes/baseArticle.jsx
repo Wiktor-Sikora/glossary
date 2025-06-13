@@ -24,7 +24,8 @@ export function Return() {
 
     return(
         <button className="relative" onClick={() => setWasClicked(true)}>
-            <Link to="/" className={`fixed top-10 border-2 border-blue-magenta p-2 text-2xl rounded-full font-semibold hover:scale-110 ${wasClicked ? '-left-3 duration-50' : 'left-15 duration-100'}`}
+            <Link to="/" className={`fixed top-10 border-2 border-blue-magenta p-2 text-2xl rounded-full font-semibold hover:scale-110 ${wasClicked ? '-left-3 duration-50' : 'left-15 duration-100'}
+            max-sm:hidden`}
 
             >
                 <IconContext.Provider value={{className: "stroke-1 my-auto" }}>
@@ -36,9 +37,11 @@ export function Return() {
 }
 
 export function ArticleHeader({ title, timeComplexity, spaceComplexity, dataType }) {
-    return (<div className="flex flex-row justify-between w-full">
+    return (<div className="flex flex-row justify-between w-full
+                            max-sm:flex-col">
         <h1 className="text-5xl font-bold text-rosepink my-auto">{ title }</h1>
-        <div className="flex flex-col ">
+        <div className="flex flex-col
+                        max-sm:mt-5">
             <p>Time complexity: <span className="text-rosepink my-auto">{ timeComplexity }</span></p>
             <p>Space complexity: <span className="text-rosepink my-auto">{ spaceComplexity }</span></p>
             <p>Data type: <span className="text-rosepink my-auto">{ dataType }</span></p>
@@ -52,7 +55,8 @@ export function Visualization({ type, algorithm, }){
 
     return(<div className="flex flex-col gap-y-3">
         <h3 className="text-3xl font-bold text-rosepink my-auto">Visualization</h3>
-        <div className={`flex flex-row gap-3 ${type==="ArrayFrame" ? "h-72" : "h-102"}`}>
+        <div className={`flex flex-row gap-3 ${type==="ArrayFrame" ? "h-72" : "h-102"}
+                        max-sm:flex-col`}>
             <div className="relative flex flex-col gap-1 w-full border-blue-magenta border-2 rounded-xl p-3">
                 {type === "ArrayFrame" ? <ArrayComponent /> :
                 <>
@@ -67,15 +71,16 @@ export function Visualization({ type, algorithm, }){
                         )}
                        {(algorithm === "A* Algorithm" || algorithm === "Dijkstra's Algorithm") && (
                           <>
-                            <br/>Shift+click on edge to increase weight
-                            <br/>Ctrl+click on edge to decrease weight
+                            <br/>Shift+click on arrow to increase weight
+                            <br/>Ctrl+click on arrow to decrease weight
                           </>
                         )}
                      </div>
                 </> 
                 }
             </div>
-            <div className="flex flex-col gap-3 border-blue-magenta border-2 rounded-xl p-3">
+            <div className="flex flex-col gap-3 border-blue-magenta border-2 rounded-xl p-3
+                        max-sm:flex-row">
                 {graphControls && (
                     <>
                       <button
@@ -107,7 +112,7 @@ export function Visualization({ type, algorithm, }){
             </div>
         </div>
          {pathsOutput && (
-        <div className="whitespace-pre-wrap border-2 border-rosepink text-white rounded-xl p-3 bg-gray-900">
+        <div className="whitespace-pre-wrap border-2 border-rosepink text-white rounded-xl p-3 bg-dark-blue-magenta">
           <h4 className="text-lg font-semibold mb-2 text-rosepink">Path results:</h4>
           <div>{pathsOutput}</div>
         </div>
@@ -118,7 +123,8 @@ export function Visualization({ type, algorithm, }){
 export function Article({ definition, constraints, algorithmArguments, explanation, returns }) {
     return(
         <article className="flex flex-col gap-y-10 text-lg">
-            <div className="flex flex-col gap-y-3">
+            <div className="flex flex-col gap-y-3
+                        max-sm:mt-25">
                 <h3 className="text-3xl font-bold text-rosepink my-auto">Definition</h3>
                 <p>{definition}</p>
             </div>
@@ -172,7 +178,8 @@ export function CodeBlockSection({ languages }) {
              >
 
                 <div className="relative">
-                    <CodeBlock.Code className="bg-navy-blue-magenta border-2 border-blue-magenta !p-6 rounded-xl shadow-lg">
+                    <CodeBlock.Code className="bg-navy-blue-magenta border-2 border-blue-magenta !p-6 rounded-xl shadow-lg sm:text-wrap
+                    max-sm:overflow-scroll max-sm:!pt-10">
                         <div className="table-row">
                             <CodeBlock.LineNumber className="table-cell pr-4 text-sm text-gray-500 text-right select-none" />
                             <CodeBlock.LineContent className="table-cell">

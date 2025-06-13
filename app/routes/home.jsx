@@ -71,9 +71,9 @@ function Tiles() {
       <Tile path="merge-sort" title="Merge sort" purpose="Sorting" complexity="O(nlog n)" img={imgSort} gif={gifSort} imgAlt="Sort"/>
       <Tile path="quick-sort" title="Quick sort" purpose="Sorting" complexity="O(nlog n)" img={imgSort} gif={gifSort} imgAlt="Sort"/>
       <Tile path="binary-search" title="Binary search" purpose="Searching" complexity="O(log n)" img={imgSearch} gif={gifSearch} imgAlt="Search"/>
-      {/*<Tile path="interpolation-search" title="Interpolation search" purpose="Searching" complexity="O(loglog n)" img={imgSearch} gif={gifSearch} imgAlt="Search"/>*/}
-      {/*<Tile path="jump-search" title="Jump search" purpose="Searching" complexity="O(loglog n)" img={imgSearch} gif={gifSearch} imgAlt="Search"/>*/}
-      <Tile path="a-star" title="A*" purpose="Path finding" complexity="O(V+E)" img={imgGraph} gif={gifGraph} imgAlt="Graph"/>
+      <Tile path="interpolation-search" title="Interpolation search" purpose="Searching" complexity="O(loglog n)" img={imgSearch} gif={gifSearch} imgAlt="Search"/>
+      <Tile path="jump-search" title="Jump search" purpose="Searching" complexity="O(loglog n)" img={imgSearch} gif={gifSearch} imgAlt="Search"/>
+      <Tile path="a-star" title="A*" purpose="Path finding" complexity={<>O(b)<sup>d</sup></>} img={imgGraph} gif={gifGraph} imgAlt="Graph"/>
       <Tile path="bfs" title="BFS" purpose="Path finding" complexity="O(V+E)" img={imgGraph} gif={gifGraph} imgAlt="Graph"/>
       <Tile path="dijkstra" title="Dijkstra" purpose="Path finding" complexity="O((V+E)logV)" img={imgGraph} gif={gifGraph} imgAlt="Graph"/>
       <Tile path="dfs" title="DFS" purpose="Path finding" complexity="O(V+E)" img={imgGraph} gif={gifGraph} imgAlt="Graph"/>
