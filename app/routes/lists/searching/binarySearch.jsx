@@ -10,10 +10,9 @@ export function meta() {
         { name: "description", content: "A collection of various algorithms | Binary Search article" },
     ];
 }
-async function algorithm(arrayElements, setElements, elementToBeSearchedValue, delay, shouldRunRef, setShouldRunState, setComparisons, setElementFoundIndex) {
+async function algorithm(arrayElements, setElements, elementToBeSearchedValue, delay, shouldRunRef, setComparisons, setElementFoundIndex) {
     setComparisons(0)
     shouldRunRef.current = true
-    setElementFoundIndex(null)
 
     let low = 0
     let high = arrayElements.length - 1
