@@ -1,5 +1,5 @@
 import description from "../../../assets/texts/quickSort.jsx";
-import {Article, ArticleHeader, CodeBlockSection} from "../../baseArticle.jsx";
+import {Article, ArticleHeader, CodeBlockSection, Return} from "../../baseArticle.jsx";
 import {ArrayFrameSorting} from "../../../components/arrayFrameSorting.jsx";
 
 export function meta() {
@@ -80,10 +80,11 @@ function Visualization({ algorithm, isReordable = true }) {
 }
 
 export default function QuickSort() {
-    return (<section className="w-[80%] mx-auto flex flex-col gap-y-10 md:scale-90 text-lg">
-        <ArticleHeader title={description.title} timeComplexity={description.complexity.time} spaceComplexity={description.complexity.space} dataType={description.dataTypes} />
-        <Visualization algorithm={algorithm}/>
-        <Article definition={description.definition} constraints={description.constraints} algorithmArguments={description.arguments} explanation={description.explanation} returns={description.returns} />
-        <CodeBlockSection languages={description.languages} />
-    </section>);
+    return (<><Return />
+        <section className="w-[80%] mx-auto flex flex-col gap-y-10 md:scale-90 text-lg">
+            <ArticleHeader title={description.title} timeComplexity={description.complexity.time} spaceComplexity={description.complexity.space} dataType={description.dataTypes} />
+            <Visualization algorithm={algorithm}/>
+            <Article definition={description.definition} constraints={description.constraints} algorithmArguments={description.arguments} explanation={description.explanation} returns={description.returns} />
+            <CodeBlockSection languages={description.languages} />
+        </section></>);
 }

@@ -48,7 +48,7 @@ export function Element({ id, onElementClick, value, maxValue, state= 1}) {
                     style={{height: height+'%'}} key={id} ></button>)
 }
 
-export function ArrayFrameSearching({ algorithm, arrayLen = 50, maxValue = 50, minValue = 0, isReordable = true }) {
+export function ArrayFrameSearching({ algorithm, arrayLen = 50, maxValue = 50, minValue = 0}) {
     const [arrayLength, setArrayLength] = useState(arrayLen)
     const [elements, setElements] = useImmer([]);
     const [comparisons, setComparisons] = useState(0)
@@ -70,7 +70,6 @@ export function ArrayFrameSearching({ algorithm, arrayLen = 50, maxValue = 50, m
     }
 
     function handleReorder() {
-        setShouldRunState(false)
         shouldRunRef.current = false
         setComparisons(0)
 
@@ -78,11 +77,10 @@ export function ArrayFrameSearching({ algorithm, arrayLen = 50, maxValue = 50, m
     }
 
     function handleRandomize(length) {
-        setShouldRunState(false)
         shouldRunRef.current = false
         setComparisons(0)
 
-        setElements(generateRandomArray(length, maxValue, minValue, true))
+        setElements(() => generateRandomArray(length, maxValue, minValue, true))
     }
 
     function onElementClick(index, value) {
@@ -96,8 +94,9 @@ export function ArrayFrameSearching({ algorithm, arrayLen = 50, maxValue = 50, m
 
         elementToBeSearchedIndex.current = index
         elementToBeSearchedValue.current = value
+        setElementFoundIndex(null)
 
-        algorithm(elements, setElements, elementToBeSearchedValue, delay, shouldRunRef, setShouldRunState, setComparisons, setElementFoundIndex)
+        algorithm(elements, setElements, elementToBeSearchedValue, delay, shouldRunRef, setComparisons, setElementFoundIndex)
     }
 
     return (<div className="flex flex-row gap-3 h-72">
@@ -116,10 +115,10 @@ export function ArrayFrameSearching({ algorithm, arrayLen = 50, maxValue = 50, m
             </div>
         </div>
         <div className="grid grid-cols-2 gap-3 border-blue-magenta place-items-center border-2 rounded-xl p-3">
-            <SquareButton onButtonClick={isReordable ? () => handleRandomize(arrayLength) : null} alt={"Randomize Array"}>
+            <SquareButton onButtonClick={() => handleRandomize(arrayLength)} alt={"Randomize Array"}>
                 <IconContext.Provider value={{size: "3rem" }}><CgDice5 /></IconContext.Provider>
             </SquareButton>
-            <SquareButton onButtonClick={() => handleReorder()} alt={"Shuffle Array"}>
+            <SquareButton alt={"Shuffle Array"}>
                 <IconContext.Provider value={{size: "3rem" }}><TbArrowsShuffle /></IconContext.Provider>
             </SquareButton>
             <RangeInput description={"Delay:"} initialValue={delay} minValue={1} maxValue={1000} onChange={(e) => setDelay(Number(e.target.value))} />
