@@ -179,7 +179,7 @@ export function CodeBlockSection({ languages }) {
 
                 <div className="relative">
                     <CodeBlock.Code className="bg-navy-blue-magenta border-2 border-blue-magenta !p-6 rounded-xl shadow-lg sm:text-wrap
-                    max-sm:overflow-scroll max-sm:!pt-10">
+                    max-sm:overflow-x-hidden max-sm:!pt-10">
                         <div className="table-row">
                             <CodeBlock.LineNumber className="table-cell pr-4 text-sm text-gray-500 text-right select-none" />
                             <CodeBlock.LineContent className="table-cell">

@@ -1,32 +1,10 @@
 import {useState, useMemo, useRef, useEffect} from 'react';
 import {CgDice5} from "react-icons/cg";
 import {useImmer} from "use-immer";
-import {changeStateArea, generateRandomArray, reorder} from "../datatypes/array.js";
+import {changeStateArea, generateRandomArray} from "../datatypes/array.js";
 import {IconContext} from "react-icons";
 import {TbArrowsShuffle} from "react-icons/tb";
-
-export function SquareButton({children, onButtonClick}) {
-    return (<button onClick={onButtonClick}
-                    className={`duration-200 ${onButtonClick !== undefined ? 'text-rosepink hover:scale-110' : 'text-blue-magenta'}`}
-    >
-        {children}
-    </button>)
-}
-
-export function RangeInput({description, initialValue, minValue, maxValue, onChange, step=1}) {
-    return (<div className="col-span-full w-full flex flex-col gap-1">
-        <label className="text-xl w-full font-bold text-rosepink">{description}
-            <input className={"w-full bg-navy-blue-magenta border-blue-magenta border-2 rounded-2xl accent-rosepink appearance-none cursor-pointer"}
-                   type="range"
-                   min={minValue}
-                   max={maxValue}
-                   step={step}
-                   value={initialValue}
-                   onChange={onChange}
-            />
-        </label>
-    </div>)
-}
+import {SquareButton, RangeInput} from "./input.jsx";
 
 export function Element({ id, onElementClick, value, maxValue, state= 1}) {
     const height = useMemo( () =>(value / maxValue) * 100, [value, maxValue])
@@ -69,13 +47,6 @@ export function ArrayFrameSearching({ algorithm, arrayLen = 50, maxValue = 50, m
         handleRandomize(length)
     }
 
-    function handleReorder() {
-        shouldRunRef.current = false
-        setComparisons(0)
-
-        setElements(draft => {reorder(draft)})
-    }
-
     function handleRandomize(length) {
         shouldRunRef.current = false
         setComparisons(0)
@@ -99,9 +70,9 @@ export function ArrayFrameSearching({ algorithm, arrayLen = 50, maxValue = 50, m
         algorithm(elements, setElements, elementToBeSearchedValue, delay, shouldRunRef, setComparisons, setElementFoundIndex)
     }
 
-    return (<div className="flex flex-row gap-3 h-72">
-        <div className={'flex flex-col gap-1 w-full border-blue-magenta border-2 rounded-xl p-3'}>
-            <div className={'flex flex-row w-full gap-3'}>
+    return (<div className="flex flex-col md:flex-row gap-3 md:h-72">
+        <div className={'flex flex-col h-72 md:h-auto gap-1 w-full border-blue-magenta border-2 rounded-xl p-3'}>
+            <div className={'flex flex-row flex-wrap w-full gap-3 text-sm md:text-2xl'}>
                 <p>Comparisons: {comparisons}</p>
                 <p>Delay: {delay}ms</p>
                 <p>Items: {arrayLength}</p>
