@@ -1,4 +1,4 @@
-## Glossary
+# Glossary
 Co-created with [@nevermore19](https://github.com/nevermore19) 
 
 Algorithm Glossary is a React-based web application that offers interactive visualizations and concise explanations of common algorithms. Designed as an educational tool, it helps users understand how algorithms work through real-time animations and intuitive UI. Perfect for students, educators, and developers looking to reinforce algorithmic concepts visually.
