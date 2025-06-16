@@ -12,7 +12,6 @@ import algorithms from '../assets/visualizations/graphs/graphAlgorithms';
 import FloatingEdge from './FloatingEdge';
 import FloatingConnectionLine from './FloatingConnectionLine';
 
-
 import 'reactflow/dist/style.css';
 
 function CircleNodes({ data }) {

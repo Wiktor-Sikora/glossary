@@ -86,7 +86,7 @@ export function Visualization({ type, algorithm, }){
                         onClick={graphControls.runAlgorithm}
                         className="text-rosepink hover:scale-110 duration-200"
                       >
-                        <CiPlay1 className="m-auto size-14"/>
+                        <CiPlay1 className="m-auto stroke-1 size-14"/>
                       </button>
                       <button
                         onClick={graphControls.resetGraph}

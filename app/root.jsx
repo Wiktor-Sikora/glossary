@@ -6,8 +6,9 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
-
+import { IoLogoGithub } from "react-icons/io";
 import "./app.css";
+import {IconContext} from "react-icons";
 
 export function Layout({ children }) {
   return (
@@ -28,7 +29,12 @@ export function Layout({ children }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  return (<>
+      <a href="https://github.com/Wiktor-Sikora/glossary" target={"_blank"} className={"collapse md:visible fixed top-5 right-5 hover:scale-110 duration-200"}>
+          <IconContext.Provider value={{size: "3rem", className: "fill-white" }}><IoLogoGithub /></IconContext.Provider>
+      </a>
+      <Outlet />
+  </>);
 }
 
 export function ErrorBoundary({ error }) {
