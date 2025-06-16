@@ -1,11 +1,13 @@
 // would do it differently, but reactive arrays are not supported :(
 
+import {getUUID} from "../utils/uujd.js";
+
 export function generateRandomArray(length, maxValue = 50, minValue = 1, shouldBeSorted = false) {
     let array = Array(length);
 
     for (let i = 0; i < array.length; i++) {
         array[i] = {
-            id: crypto.randomUUID(),
+            id: getUUID(),
             value: Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue,
             state: 1
         }
@@ -22,8 +24,6 @@ export function changeStateArea(array, startIndex, endIndex, stateValue) {
     for (let i = startIndex; i <= endIndex; i++) {
         array[i].state = stateValue;
     }
-
-    // return array
 }
 
 export function reorder(array) {

@@ -6,7 +6,7 @@ import {IconContext} from "react-icons";
 import {CiPlay1, CiStop1} from "react-icons/ci";
 import {TbArrowsShuffle} from "react-icons/tb";
 import {SquareButton, RangeInput} from "./input.jsx";
-import {Element} from "arrayComponents.jsx";
+import {Element} from "./arrayComponents.jsx";
 
 export function ArrayFrameSorting({ algorithm, arrayLen = 50, maxValue = 50, minValue = 0, isReordable = true }) {
     const [arrayLength, setArrayLength] = useState(arrayLen)

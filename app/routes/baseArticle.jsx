@@ -11,7 +11,6 @@ import { RiResetLeftFill } from "react-icons/ri";
 import { IoIosAddCircleOutline} from "react-icons/io";
 import { IoRemoveCircleOutline } from "react-icons/io5";
 
-
 export function meta() {
     return [
         { title: "Algorithm Glossary | Article" },

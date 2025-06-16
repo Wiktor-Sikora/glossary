@@ -1,7 +1,6 @@
 import {Article, ArticleHeader, CodeBlockSection, Return} from "../../baseArticle.jsx";
 import {ArrayFrameSorting} from "../../../components/arrayFrameSorting.jsx";
 import description from "../../../assets/texts/bubbleSort.jsx";
-// import {playDynamicTone} from "../../../utils/sound.js"
 
 export function meta() {
     return [

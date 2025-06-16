@@ -1,30 +1,11 @@
-import {useState, useMemo, useRef, useEffect} from 'react';
+import {useState, useRef, useEffect} from 'react';
 import {CgDice5} from "react-icons/cg";
 import {useImmer} from "use-immer";
 import {changeStateArea, generateRandomArray} from "../datatypes/array.js";
 import {IconContext} from "react-icons";
 import {TbArrowsShuffle} from "react-icons/tb";
 import {SquareButton, RangeInput} from "./input.jsx";
-
-export function Element({ id, onElementClick, value, maxValue, state= 1}) {
-    const height = useMemo( () =>(value / maxValue) * 100, [value, maxValue])
-    const bgColor = useMemo(() => {
-        if (state === 0) {
-            return "bg-blue-magenta"
-        } else if (state === 1) {
-            return "bg-white"
-        } else if (state === 2) {
-            return "bg-rosepink"
-        } else if (state === 3) {
-            return "bg-white outline-4 outline-rosepink outline-dotted -outline-offset-4"
-        }
-
-    }, [state])
-
-    return (<button onClick={onElementClick}
-                    className={`w-full ${ bgColor } ${onElementClick !== undefined && state !== 2 ? 'hover:bg-dark-rosepink' : ''}`}
-                    style={{height: height+'%'}} key={id} ></button>)
-}
+import {Element} from "./arrayComponents.jsx";
 
 export function ArrayFrameSearching({ algorithm, arrayLen = 50, maxValue = 50, minValue = 0}) {
     const [arrayLength, setArrayLength] = useState(arrayLen)
