@@ -7,9 +7,6 @@ Check out the **live** version [here](https://algorithms-glossary.vercel.app/)
 
 ![Visualization demo](https://i.imgur.com/GeXK57a.gif)
 
-
-<blockquote class="imgur-embed-pub" lang="en" data-id="a/jt3MUsy" data-context="false" ><a href="//imgur.com/a/jt3MUsy"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
-
 ## Features
 - Real-time algorithm visualization 
 - Customizable input
