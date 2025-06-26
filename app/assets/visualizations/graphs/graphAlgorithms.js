@@ -155,8 +155,16 @@ const algorithms = {
     adjacencyList[source].push({ target, edgeId: id, weight });
   });
 
-  // Simple heuristic - returns 0, which turns A* into Dijkstra (guarantees finding the optimal path)
-  const heuristic = () => 0;
+  // heuristics based on Euclidean distance
+    const heuristic = (a, b) => {
+    const nodeA = nodes.find(n => n.id === a);
+    const nodeB = nodes.find(n => n.id === b);
+    if (!nodeA || !nodeB) return 0;
+
+    const dx = nodeA.position.x - nodeB.position.x;
+    const dy = nodeA.position.y - nodeB.position.y;
+    return Math.sqrt(dx * dx + dy * dy);
+  };
 
   class PriorityQueue {
     constructor(compare) {
@@ -177,7 +185,7 @@ const algorithms = {
 
   const openSet = new PriorityQueue((x, y) => x.fScore - y.fScore);
   const gScore = { [startNodeId]: 0 };
-  const fScore = { [startNodeId]: heuristic(startNodeId) };
+  const fScore = { [startNodeId]: heuristic(startNodeId, endNodeId) };
   const cameFrom = {};
   const closedSet = new Set();
 
@@ -261,7 +269,7 @@ const algorithms = {
       if (tentativeG < (gScore[target] ?? Infinity)) {
         cameFrom[target] = current;
         gScore[target] = tentativeG;
-        fScore[target] = tentativeG + heuristic(target);
+        fScore[target] = tentativeG + heuristic(target, endNodeId);
         openSet.enqueue({ nodeId: target, fScore: fScore[target] });
 
         const newPath = basePath.concat(target);
